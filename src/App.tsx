@@ -1,25 +1,25 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import "./index.css";
+import { WeatherDetails } from "./components/WeatherDetails";
+import { ThemeProvider } from "./components/ThemeProvider";
+import { ThemeToggle } from "./components/ThemeToggle";
+import "./styles/theme.css";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider defaultTheme="light" storageKey="weather-dashboard-theme">
+      <div className="min-h-screen bg-background">
+        <header className="flex items-center justify-between p-4 border-b">
+          <h1 className="text-2xl font-bold text-foreground">
+            Weather Dashboard
+          </h1>
+          <ThemeToggle />
+        </header>
+        <main className="container mx-auto p-4 space-y-8">
+          <WeatherDetails temperature={20} />
+        </main>
+      </div>
+    </ThemeProvider>
   );
 }
 

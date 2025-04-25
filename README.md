@@ -1,46 +1,139 @@
-# Getting Started with Create React App
+# Weather Dashboard
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A modern weather dashboard built with React, TypeScript, and Tailwind CSS. This project provides a beautiful and responsive interface for viewing weather information.
 
-## Available Scripts
+## 🚀 Features
 
-In the project directory, you can run:
+- Modern UI with Tailwind CSS
+- TypeScript for type safety
+- Storybook for component documentation
+- Husky for git hooks
+- Commitlint for conventional commits
+- Responsive design
+- Component-based architecture
 
-### `npm start`
+## 📋 Prerequisites
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- Node.js (v16 or higher)
+- pnpm (recommended) or npm
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## 🛠️ Installation
 
-### `npm test`
+1. Clone the repository:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```bash
+git clone [your-repo-url]
+cd weather-dashboard
+```
 
-### `npm run build`
+2. Install dependencies:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```bash
+pnpm install
+# or
+npm install
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+3. Create a `.env` file based on `example.env`:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```bash
+cp example.env .env
+```
 
-### `npm run eject`
+## 🏃‍♂️ Running the Project
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+### Development Server
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```bash
+pnpm start
+# or
+npm start
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+This will start the development server at `http://localhost:3000`
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+### Storybook
 
-## Learn More
+```bash
+pnpm storybook
+# or
+npm run storybook
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+This will start Storybook at `http://localhost:6006`
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Building for Production
+
+```bash
+pnpm build
+# or
+npm run build
+```
+
+### Running Tests
+
+```bash
+pnpm test
+# or
+npm test
+```
+
+## 📁 Project Structure
+
+```
+src/
+├── components/         # Reusable UI components
+├── web-building-blocks/ # Core UI components
+├── styles/            # Global styles and Tailwind configuration
+├── App.tsx            # Main application component
+├── index.tsx          # Application entry point
+└── setupTests.ts      # Test configuration
+
+.storybook/            # Storybook configuration
+public/                # Static assets
+```
+
+## 🧪 Testing
+
+The project uses Jest and React Testing Library for testing. Run tests with:
+
+```bash
+pnpm test
+# or
+npm test
+```
+
+## 🔧 Git Hooks
+
+This project uses Husky and Commitlint to enforce commit message conventions. Make sure your commit messages follow the conventional commit format:
+
+- `feat:` for new features
+- `fix:` for bug fixes
+- `docs:` for documentation changes
+- `style:` for code style changes
+- `refactor:` for code refactoring
+- `test:` for test-related changes
+- `chore:` for maintenance tasks
+
+## 📚 Tech Stack
+
+- React 19
+- TypeScript
+- Tailwind CSS
+- Storybook
+- Jest
+- React Testing Library
+- Husky
+- Commitlint
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'feat: add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.

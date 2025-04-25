@@ -1,0 +1,177 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Colors - Light Theme */
+    --background: #FFFFFF;
+    --background-gradient: linear-gradient(112.65deg, #FFFFFF 0.28%, rgba(70, 97, 115, 0) 178.65%);
+    --card-bg: #D9D9D9;
+    --text: #292929;
+    --text-secondary: rgba(41, 41, 41, 0.8);
+    --search-bg: #D9D9D9;
+    --search-text: #292929;
+    --search-placeholder: rgba(41, 41, 41, 0.6);
+    --mode-toggle-bg: #D9D9D9;
+    --mode-toggle-circle: #111111;
+    --current-location-bg: #4CBB17;
+    --current-location-text: rgba(255, 255, 255, 0.8);
+    --hourly-card-bg: linear-gradient(168.19deg, #443D64 -19.21%, rgba(101, 130, 198, 0) 158.48%);
+    --temperature-gradient: linear-gradient(80.34deg, #292929 -2.93%, rgba(255, 255, 255, 0) 212.44%);
+
+    /* Colors - Dark Theme */
+    --dark-bg: linear-gradient(110.05deg, #383838 0%, rgba(158, 158, 158, 0) 71.82%);
+    --dark-card-bg: #444444;
+    --dark-text: #FFFFFF;
+    --dark-text-secondary: rgba(255, 255, 255, 0.8);
+    --dark-search-bg: #444444;
+    --dark-search-text: #FFFFFF;
+    --dark-search-placeholder: rgba(255, 255, 255, 0.6);
+    --dark-mode-toggle-bg: #D9D9D9;
+    --dark-mode-toggle-circle: #111111;
+    --dark-current-location-bg: #4CBB17;
+    --dark-current-location-text: rgba(255, 255, 255, 0.8);
+    --dark-hourly-card-bg: #373636;
+    --dark-temperature-gradient: linear-gradient(84.4deg, #FFFFFF -16.56%, rgba(255, 255, 255, 0) 118.43%);
+
+    /* Shadows */
+    --card-shadow: 10px 10px 4px rgba(0, 0, 0, 0.5);
+    --button-shadow: 0px 4px 40px rgba(0, 0, 0, 0.25);
+    --icon-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+
+    /* Border Radius */
+    --border-radius-lg: 40px;
+    --border-radius-md: 30px;
+
+    /* Font Family */
+    --font-family: 'Poppins', sans-serif;
+
+    /* Font Weights */
+    --font-weight-regular: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+    --font-weight-extrabold: 800;
+
+    /* Font Sizes */
+    --font-size-xs: 16px;
+    --font-size-sm: 18px;
+    --font-size-md: 20px;
+    --font-size-lg: 22px;
+    --font-size-xl: 24px;
+    --font-size-2xl: 32px;
+    --font-size-3xl: 36px;
+    --font-size-4xl: 80px;
+    --font-size-5xl: 96px;
+
+    /* Line Heights */
+    --line-height-sm: 26px;
+    --line-height-md: 27px;
+    --line-height-lg: 30px;
+    --line-height-xl: 33px;
+    --line-height-2xl: 39px;
+    --line-height-3xl: 52px;
+    --line-height-4xl: 59px;
+    --line-height-5xl: 131px;
+    --line-height-6xl: 157px;
+  }
+
+  .dark {
+    --background: #383838;
+    --background-gradient: linear-gradient(110.05deg, #383838 0%, rgba(158, 158, 158, 0) 71.82%);
+    --card-bg: #444444;
+    --text: #FFFFFF;
+    --text-secondary: rgba(255, 255, 255, 0.8);
+    --search-bg: #444444;
+    --search-text: #FFFFFF;
+    --search-placeholder: rgba(255, 255, 255, 0.6);
+    --mode-toggle-bg: #D9D9D9;
+    --mode-toggle-circle: #111111;
+    --current-location-bg: #4CBB17;
+    --current-location-text: rgba(255, 255, 255, 0.8);
+    --hourly-card-bg: #373636;
+    --temperature-gradient: linear-gradient(84.4deg, #FFFFFF -16.56%, rgba(255, 255, 255, 0) 118.43%);
+  }
+}
+
+@layer base {
+  body {
+    @apply bg-background text-text;
+    background-image: var(--background-gradient);
+    background-attachment: fixed;
+    font-family: var(--font-family);
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-card-bg rounded-md shadow-card;
+  }
+
+  .search-bar {
+    @apply bg-search-bg rounded-lg shadow-button text-search-text;
+  }
+
+  .current-location-btn {
+    @apply bg-current-location-bg rounded-lg shadow-button text-current-location-text;
+  }
+
+  .mode-toggle {
+    @apply bg-mode-toggle-bg rounded-lg;
+  }
+
+  .mode-toggle-circle {
+    @apply bg-mode-toggle-circle;
+  }
+
+  .hourly-card {
+    @apply bg-hourly-card-bg rounded-lg;
+  }
+
+  .temperature {
+    @apply bg-[image:var(--temperature-gradient)] bg-clip-text text-transparent;
+  }
+}
+
+/* Typography */
+@layer base {
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-poppins text-text;
+  }
+}
+
+/* Font Sizes */
+@layer utilities {
+  .text-xs { font-size: var(--font-size-xs); }
+  .text-sm { font-size: var(--font-size-sm); }
+  .text-md { font-size: var(--font-size-md); }
+  .text-lg { font-size: var(--font-size-lg); }
+  .text-xl { font-size: var(--font-size-xl); }
+  .text-2xl { font-size: var(--font-size-2xl); }
+  .text-3xl { font-size: var(--font-size-3xl); }
+  .text-4xl { font-size: var(--font-size-4xl); }
+  .text-5xl { font-size: var(--font-size-5xl); }
+}
+
+/* Line Heights */
+@layer utilities {
+  .leading-sm { line-height: var(--line-height-sm); }
+  .leading-md { line-height: var(--line-height-md); }
+  .leading-lg { line-height: var(--line-height-lg); }
+  .leading-xl { line-height: var(--line-height-xl); }
+  .leading-2xl { line-height: var(--line-height-2xl); }
+  .leading-3xl { line-height: var(--line-height-3xl); }
+  .leading-4xl { line-height: var(--line-height-4xl); }
+  .leading-5xl { line-height: var(--line-height-5xl); }
+  .leading-6xl { line-height: var(--line-height-6xl); }
+}
+
+/* Font Weights */
+@layer utilities {
+  .font-regular { font-weight: var(--font-weight-regular); }
+  .font-medium { font-weight: var(--font-weight-medium); }
+  .font-semibold { font-weight: var(--font-weight-semibold); }
+  .font-bold { font-weight: var(--font-weight-bold); }
+  .font-extrabold { font-weight: var(--font-weight-extrabold); }
+}

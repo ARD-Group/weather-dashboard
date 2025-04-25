@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    height: 100vh;
+  }
+
+  html:dir(rtl) svg.flip {
+    transform: rotateY(180deg);
+  }
+
+  #root {
+    height: 100%;
+  }
+
+  body {
+    margin: 0;
+    font-family: var(--font-family);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    height: 100%;
+  }
+
+  div[data-scroll-custom] {
+    scrollbar-width: thin;
+    scrollbar-color: #ccc #ffffff;
+  }
+}

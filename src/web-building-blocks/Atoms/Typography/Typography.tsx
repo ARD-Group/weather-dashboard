@@ -1,0 +1,122 @@
+import React from 'react';
+import { Slot } from '@radix-ui/react-slot';
+import { cva } from 'class-variance-authority';
+import { cn } from '../../shadcnUI/lib/utils';
+
+export type TypographyVariants =
+  | 'title1'
+  | 'title2'
+  | 'title3'
+  | 'subtitle1'
+  | 'subtitle2'
+  | 'subtitle2-strong'
+  | 'body2'
+  | 'body1-stronger'
+  | 'body1-strong'
+  | 'body1'
+  | 'caption1-stronger'
+  | 'caption1-strong'
+  | 'caption1'
+  | 'caption2'
+  | 'caption2-strong';
+
+const typographyVariants = cva('', {
+  variants: {
+    variant: {
+      title1: 'text-[2rem] font-semibold leading-10',
+      title2: 'text-[1.75rem] font-semibold leading-9',
+      title3: 'text-[1.5rem] font-semibold leading-8',
+      subtitle1: 'text-[1.25rem] font-semibold leading-7',
+      subtitle2: 'text-[1rem] font-semibold leading-[1.375rem]',
+      'subtitle2-strong': 'text-[1rem] leading-[1.375rem] font-black',
+      body2: 'text-[1rem] leading-[1.375rem] font-normal',
+      'body1-stronger': 'text-sm leading-5 font-black',
+      'body1-strong': 'text-sm leading-5 font-semibold',
+      body1: 'text-sm leading-5 font-normal',
+      'caption1-stronger': 'text-xs leading-4 font-black',
+      'caption1-strong': 'text-xs leading-4 font-semibold',
+      caption1: 'text-xs leading-4 font-normal',
+      'caption2-strong': 'text-[0.625rem] leading-[0.875rem] font-semibold',
+      caption2: 'text-[0.625rem] leading-[0.875rem] font-normal',
+    },
+  },
+});
+
+const variantToTag: Record<TypographyVariants, string> = {
+  title1: 'h1',
+  title2: 'h2',
+  title3: 'h3',
+  subtitle1: 'p',
+  subtitle2: 'p',
+  'subtitle2-strong': 'p',
+  body2: 'p',
+  'body1-stronger': 'p',
+  'body1-strong': 'p',
+  body1: 'p',
+  'caption1-stronger': 'p',
+  'caption1-strong': 'p',
+  caption1: 'p',
+  'caption2-strong': 'p',
+  caption2: 'p',
+};
+
+export interface TypographyProps extends React.HTMLAttributes<HTMLElement> {
+  variant?: TypographyVariants;
+  children: React.ReactNode;
+  /** @deprecated use className instead */
+  typographyStyle?: string;
+  as?: string;
+  asChild?: boolean;
+  dataTestId?: string;
+  /** @deprecated use skeleton component instead */
+  isLoading?: boolean;
+  skeletonClasses?: string;
+}
+
+const Typography = React.forwardRef<HTMLElement, TypographyProps>(
+  (
+    {
+      variant = 'body1',
+      children,
+      typographyStyle,
+      as = undefined,
+      asChild = false,
+      isLoading,
+      skeletonClasses,
+      dataTestId = 'typography',
+      className,
+      ...props
+    },
+    ref,
+  ) => {
+    const Comp = asChild ? Slot : as ?? variantToTag[variant];
+
+    if (isLoading) {
+      return (
+        <div className={cn('animate-pulse')}>
+          <Comp
+            className={cn('mb-4 h-3 w-48 rounded-full bg-gray-300', typographyVariants({ variant: 'caption1', className: skeletonClasses }))}
+            data-testid={`${dataTestId}-loading`}
+          >
+            &nbsp;
+          </Comp>
+        </div>
+      );
+    }
+
+    return (
+      <Comp
+        className={cn(typographyVariants({ variant, className: className || typographyStyle }))}
+        ref={ref}
+        data-testid={`${dataTestId}-${variant}`}
+        {...props}
+      >
+        {children}
+      </Comp>
+    );
+  },
+);
+
+Typography.displayName = 'Typography';
+
+export default Typography;
