@@ -19,7 +19,7 @@ interface ForecastCardProps {
 }
 
 const WeatherIcon: React.FC<{ type: ForecastDay["weather"] }> = ({ type }) => {
-  const iconProps = { size: 24, className: "text-white" };
+  const iconProps = { className: "w-[60px] h-[60px] text-base-white" };
 
   switch (type) {
     case "partly-cloudy":
@@ -39,22 +39,43 @@ const WeatherIcon: React.FC<{ type: ForecastDay["weather"] }> = ({ type }) => {
 
 const ForecastCard: React.FC<ForecastCardProps> = ({ days }) => {
   return (
-    <div className="bg-gray-800 rounded-xl p-6 shadow-lg w-[300px]">
-      <Typography variant="subtitle1" className="text-white mb-4">
-        5 Days Forecast:
+    <div className="w-full h-full bg-primary-dark dark:bg-base-black rounded-panel shadow-panel p-6">
+      {/* Title */}
+      <Typography
+        variant="title4"
+        className="text-base-white font-bold ml-8 mb-6"
+      >
+        5 Days Forecast
       </Typography>
+
+      {/* Forecast Days */}
       <div className="space-y-4">
         {days.map((day, index) => (
-          <div key={index} className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
+          <div key={index} className="flex items-center h-[60px] mx-[30px]">
+            {/* Weather Icon */}
+            <div className="w-[60px]">
               <WeatherIcon type={day.weather} />
-              <Typography variant="body1-strong" className="text-white">
+            </div>
+
+            {/* Temperature */}
+            <div className="w-full ">
+              <Typography
+                variant="subtitle1"
+                className="text-base-white font-semibold text-center"
+              >
                 {day.temperature}°C
               </Typography>
             </div>
-            <Typography variant="body2" className="text-gray-400">
-              {day.date}
-            </Typography>
+
+            {/* Date */}
+            <div className="w-full ml-[60px]">
+              <Typography
+                variant="subtitle2"
+                className="text-base-white font-semibold"
+              >
+                {day.date}
+              </Typography>
+            </div>
           </div>
         ))}
       </div>

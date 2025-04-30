@@ -7,6 +7,7 @@ export type TypographyVariants =
   | "title1"
   | "title2"
   | "title3"
+  | "title4"
   | "subtitle1"
   | "subtitle2"
   | "subtitle2-strong"
@@ -53,6 +54,7 @@ const variantToTag: Record<TypographyVariants, string> = {
   title1: "h1",
   title2: "h2",
   title3: "h3",
+  title4: "h4",
   subtitle1: "p",
   subtitle2: "p",
   "subtitle2-strong": "p",

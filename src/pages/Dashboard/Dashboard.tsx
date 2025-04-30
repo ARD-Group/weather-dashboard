@@ -7,7 +7,7 @@ import { Header } from "../../components/Header";
 
 const Dashboard: React.FC = () => {
   return (
-    <div className="min-h-screen bg-gray-900 ">
+    <div className="min-h-screen bg-background-gradient ">
       <Header />
       <div className="container mx-auto">
         {/* Top row */}

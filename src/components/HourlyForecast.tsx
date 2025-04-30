@@ -15,7 +15,7 @@ interface HourlyForecastProps {
 }
 
 const WeatherIcon: React.FC<{ type: HourlyData["weather"] }> = ({ type }) => {
-  const iconProps = { size: 32, className: "text-yellow-400" };
+  const iconProps = { className: "w-[80px] h-[80px] text-base-white" };
 
   switch (type) {
     case "sunny":
@@ -46,39 +46,77 @@ const WindArrow: React.FC<{ direction: HourlyData["windDirection"] }> = ({
 
   return (
     <div
-      className="w-6 h-6 flex items-center justify-center"
+      className="w-[55px] h-[55px] flex items-center justify-center"
       style={{ transform: `rotate(${getRotation()}deg)` }}
     >
-      <div className="text-blue-400 text-2xl">▲</div>
+      <div className="text-base-white text-4xl">▲</div>
+    </div>
+  );
+};
+
+const HourCard: React.FC<HourlyData> = ({
+  time,
+  temperature,
+  weather,
+  windSpeed,
+  windDirection,
+}) => {
+  return (
+    <div className="w-full h-full bg-secondary-dark rounded-card flex flex-col items-center">
+      {/* Hour */}
+      <Typography
+        variant="subtitle1"
+        className="text-base-white font-bold mt-[13px]"
+      >
+        {time}
+      </Typography>
+
+      {/* Weather Icon */}
+      <div className="mt-[29px]">
+        <WeatherIcon type={weather} />
+      </div>
+
+      {/* Temperature */}
+      <Typography
+        variant="subtitle2"
+        className="text-base-white font-bold mt-[1px]"
+      >
+        {temperature}°C
+      </Typography>
+
+      {/* Wind Direction */}
+      <div className="mt-[4px]">
+        <WindArrow direction={windDirection} />
+      </div>
+
+      {/* Wind Speed */}
+      <Typography
+        variant="subtitle2"
+        className="text-base-white font-bold mt-[10px]"
+      >
+        {windSpeed}km/h
+      </Typography>
     </div>
   );
 };
 
 const HourlyForecast: React.FC<HourlyForecastProps> = ({ hours }) => {
   return (
-    <div className="bg-gray-800 rounded-xl p-6 shadow-lg">
-      <Typography variant="subtitle1" className="text-white mb-6 text-center">
-        Hourly Forecast:
-      </Typography>
-      <div className="flex gap-4 justify-between">
-        {hours.map((hour, index) => (
-          <div
-            key={index}
-            className="bg-gray-700 rounded-lg p-4 flex flex-col items-center space-y-2 min-w-[80px]"
-          >
-            <Typography variant="body1-strong" className="text-white">
-              {hour.time}
-            </Typography>
-            <WeatherIcon type={hour.weather} />
-            <Typography variant="subtitle2" className="text-white">
-              {hour.temperature}°C
-            </Typography>
-            <WindArrow direction={hour.windDirection} />
-            <Typography variant="caption1" className="text-gray-400">
-              {hour.windSpeed}km/h
-            </Typography>
-          </div>
-        ))}
+    <div className="w-full h-full bg-primary-dark dark:bg-base-black rounded-panel shadow-panel p-4 flex">
+      <div className="flex flex-col h-full">
+        {/* Title */}
+        <div className="flex justify-center mb-[54px]">
+          <Typography variant="title3" className="text-base-white font-bold">
+            Hourly Forecast
+          </Typography>
+        </div>
+
+        {/* Hour Cards */}
+        <div className="flex gap-[15px] px-[20px]">
+          {hours.map((hour, index) => (
+            <HourCard key={index} {...hour} />
+          ))}
+        </div>
       </div>
     </div>
   );

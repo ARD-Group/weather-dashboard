@@ -1,24 +1,36 @@
-import React, { forwardRef, useEffect, useRef, useState, useCallback, useMemo } from 'react';
-import { X } from 'lucide-react';
-import { Command as CommandPrimitive } from 'cmdk';
-import { PopoverAnchor } from '@radix-ui/react-popover';
+import React, {
+  forwardRef,
+  useEffect,
+  useRef,
+  useState,
+  useCallback,
+  useMemo,
+} from "react";
+import { X } from "lucide-react";
+import { Command as CommandPrimitive } from "cmdk";
+import { PopoverAnchor } from "@radix-ui/react-popover";
 
-import { cn } from '../../shadcnUI/lib/utils';
-import { Command, CommandGroup, CommandItem, CommandList } from '../../shadcnUI/components/ui/command';
-import { Popover, PopoverContent } from '../../shadcnUI/components/ui/popover';
+import { cn } from "../../shadcnUI/lib/utils";
+import {
+  Command,
+  CommandGroup,
+  CommandItem,
+  CommandList,
+} from "../../shadcnUI/components/ui/command";
+import { Popover, PopoverContent } from "../../shadcnUI/components/ui/popover";
 
-import { useDebounce } from './useDebounce';
-import { transToGroupOption, removePickedOption } from './utils';
-import { getS3Path } from '../../utils';
+import { useDebounce } from "./useDebounce";
+import { transToGroupOption, removePickedOption } from "./utils";
+import { getS3Path } from "../../utils";
 
-import ShowIf from '../ShowIf/ShowIf';
+import ShowIf from "../ShowIf/ShowIf";
 
-import EmptyItem from './EmptyItem';
-import APIPagination, { ApiPaginationAndSearch } from './APIPagination';
-import MultipleSelectionInput from './MultipleSelectionInput';
-import CreatableItem from './CreatableItem';
+import EmptyItem from "./EmptyItem";
+import APIPagination, { ApiPaginationAndSearch } from "./APIPagination";
+import MultipleSelectionInput from "./MultipleSelectionInput";
+import CreatableItem from "./CreatableItem";
 
-import { Option, GroupOption } from './types';
+import { Option, GroupOption } from "./types";
 
 type FEPaginationAndSearch = {
   onSearchSync?: (value: string) => Option[];
@@ -42,20 +54,23 @@ type MaxSelectedProps =
   | { maxSelected?: number; onMaxSelected?: never };
 
 type SingleSelectionProps = {
-  mode?: 'single';
+  mode?: "single";
   value?: Option;
   onChange?: (option: Option | Option[]) => void;
 };
 
 type MultipleSelectionProps = {
-  mode?: 'multiple';
+  mode?: "multiple";
   value?: Option[];
   onChange?: (options: Option[] | Option) => void;
 };
 
 type SelectionProps = SingleSelectionProps | MultipleSelectionProps;
 
-export type MultipleSelectorProps<T> = (FEPaginationAndSearch | ApiPaginationAndSearch) &
+export type MultipleSelectorProps<T> = (
+  | FEPaginationAndSearch
+  | ApiPaginationAndSearch
+) &
   AddButtonProps &
   MaxSelectedProps &
   SelectionProps & {
@@ -72,7 +87,10 @@ export type MultipleSelectorProps<T> = (FEPaginationAndSearch | ApiPaginationAnd
     className?: string;
     enableFetchOnFocus?: boolean;
     commandProps?: React.ComponentPropsWithoutRef<typeof Command>;
-    inputProps?: Omit<React.ComponentPropsWithoutRef<typeof CommandPrimitive.Input>, 'value' | 'placeholder' | 'disabled'>;
+    inputProps?: Omit<
+      React.ComponentPropsWithoutRef<typeof CommandPrimitive.Input>,
+      "value" | "placeholder" | "disabled"
+    >;
     hideClearAllButton?: boolean;
     dataTestId?: string;
     renderCustomLabel?: (option: Option) => React.ReactNode;
@@ -88,6 +106,8 @@ export type MultipleSelectorProps<T> = (FEPaginationAndSearch | ApiPaginationAnd
       badgeClassName?: string;
     };
     readOnly?: boolean;
+    icon?: React.ReactNode;
+    mainIcon?: React.ReactNode;
   };
 
 export interface MultipleSelectorRef {
@@ -99,10 +119,14 @@ export interface MultipleSelectorRef {
 let onConfirmRemove: () => void = () => {};
 let onConfirmRemoveAll: () => void = () => {};
 
-const getInputPlaceholder = (searchCreatePlaceholder: string | undefined, hasSearch: boolean, creatable: boolean) => {
-  const addPlaceholder = creatable ? 'Add' : '';
-  const searchPlaceholder = hasSearch ? 'Search...' : '...';
-  const defaultPlaceholder = `${addPlaceholder}${hasSearch && creatable ? ' OR ' : ''}${searchPlaceholder}`;
+const getInputPlaceholder = (
+  searchCreatePlaceholder: string | undefined,
+  hasSearch: boolean,
+  creatable: boolean
+) => {
+  const addPlaceholder = creatable ? "Add" : "";
+  const searchPlaceholder = hasSearch ? "Search..." : "...";
+  const defaultPlaceholder = `${addPlaceholder}${hasSearch && creatable ? " OR " : ""}${searchPlaceholder}`;
 
   return searchCreatePlaceholder ? searchCreatePlaceholder : defaultPlaceholder;
 };
@@ -111,17 +135,17 @@ const MultipleSelector = forwardRef(
   <T extends Option>(
     {
       value = [],
-      keywords = ['label'] as Array<keyof T>,
+      keywords = ["label"] as Array<keyof T>,
       onChange: handleChange,
       placeholder: searchCreatePlaceholder,
-      inputPlaceholder = 'Select...',
+      inputPlaceholder = "Select...",
       options: optionsProp = [],
       delay = 700,
       onSearch,
       onSearchSync,
       loadingIndicator,
       emptyIndicator,
-      mode: modeProps = 'multiple',
+      mode: modeProps = "multiple",
       maxSelected: maxSelectedProps = Number.MAX_SAFE_INTEGER,
       onMaxSelected,
       hidePlaceholderWhenSelected,
@@ -136,7 +160,7 @@ const MultipleSelector = forwardRef(
       isAddLoading = false,
       inputProps,
       hideClearAllButton = false,
-      dataTestId = 'multiple-selector',
+      dataTestId = "multiple-selector",
       renderCustomLabel,
       renderCustomOption,
       renderCustomValue,
@@ -146,23 +170,30 @@ const MultipleSelector = forwardRef(
       onRemoveAll,
       styleClasses,
       readOnly = false,
+      icon,
+      mainIcon,
       ...props
     }: MultipleSelectorProps<T>,
-    ref: React.Ref<MultipleSelectorRef>,
+    ref: React.Ref<MultipleSelectorRef>
   ) => {
     const inputRef = useRef<HTMLInputElement>(null);
 
-    const mode = maxSelectedProps === 1 || modeProps === 'single' ? 'single' : 'multiple';
-    const maxSelected = mode === 'single' ? 1 : maxSelectedProps;
+    const mode =
+      maxSelectedProps === 1 || modeProps === "single" ? "single" : "multiple";
+    const maxSelected = mode === "single" ? 1 : maxSelectedProps;
 
     const [open, setOpen] = useState(false);
     // const [_onScrollbar, setOnScrollbar] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
-    const [selected, setSelected] = useState<Option[]>(Array.isArray(value) ? value : [value]);
-    const [options, setOptions] = useState<GroupOption>(transToGroupOption(optionsProp || [], groupBy));
-    const [inputValue, setInputValue] = useState('');
+    const [selected, setSelected] = useState<Option[]>(
+      Array.isArray(value) ? value : [value]
+    );
+    const [options, setOptions] = useState<GroupOption>(
+      transToGroupOption(optionsProp || [], groupBy)
+    );
+    const [inputValue, setInputValue] = useState("");
     const [prevInputValue, setPrevInputValue] = useState<string>();
     const debouncedSearchTerm = useDebounce(inputValue, delay);
 
@@ -182,11 +213,11 @@ const MultipleSelector = forwardRef(
         }
       },
       // eslint-disable-next-line react-hooks/exhaustive-deps
-      [JSON.stringify(value)],
+      [JSON.stringify(value)]
     );
 
     const onChange = useCallback((options: Option[]) => {
-      const formattedOptions = mode === 'single' ? options?.[0] : options;
+      const formattedOptions = mode === "single" ? options?.[0] : options;
 
       handleChange?.(formattedOptions);
       // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -199,7 +230,7 @@ const MultipleSelector = forwardRef(
         setSelected(newOptions);
       },
       // eslint-disable-next-line react-hooks/exhaustive-deps
-      [onChange, selected],
+      [onChange, selected]
     );
 
     React.useImperativeHandle(
@@ -210,20 +241,23 @@ const MultipleSelector = forwardRef(
         focus: () => inputRef?.current?.focus(),
         reset: () => setSelected([]),
       }),
-      [selected],
+      [selected]
     );
 
     const resetToInitial = useCallback(() => {
       setPrevInputValue(undefined);
-      setInputValue('');
+      setInputValue("");
       setOptions(transToGroupOption(optionsProp || [], groupBy));
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const handleClickOutside = useCallback(
       (event: MouseEvent) => {
-        const isOutsideDropdown = dropdownRef.current && !dropdownRef.current.contains(event.target as Node);
-        const isOutsideInput = inputRef.current && !inputRef.current.contains(event.target as Node);
+        const isOutsideDropdown =
+          dropdownRef.current &&
+          !dropdownRef.current.contains(event.target as Node);
+        const isOutsideInput =
+          inputRef.current && !inputRef.current.contains(event.target as Node);
 
         if (isOutsideDropdown && isOutsideInput) {
           setOpen(false);
@@ -232,7 +266,7 @@ const MultipleSelector = forwardRef(
         }
       },
       // eslint-disable-next-line react-hooks/exhaustive-deps
-      [optionsProp, groupBy],
+      [optionsProp, groupBy]
     );
 
     const onChipRemove = useCallback(
@@ -246,7 +280,7 @@ const MultipleSelector = forwardRef(
           handleUnselect(option);
         }
       },
-      [onRemove, handleUnselect, resetAfterConfirmation],
+      [onRemove, handleUnselect, resetAfterConfirmation]
     );
 
     const handleRemoveAll = useCallback(
@@ -263,7 +297,7 @@ const MultipleSelector = forwardRef(
         }
       },
       // eslint-disable-next-line react-hooks/exhaustive-deps
-      [onRemoveAll, resetAfterConfirmation],
+      [onRemoveAll, resetAfterConfirmation]
     );
 
     React.useEffect(() => {
@@ -278,22 +312,30 @@ const MultipleSelector = forwardRef(
     useEffect(() => {
       if (!open) return;
 
-      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener("mousedown", handleClickOutside);
 
       if (!onSearchSync && !onSearch) return;
       if (debouncedSearchTerm === prevInputValue) return;
-      if (Object.keys(options)?.length !== 0 && debouncedSearchTerm === '' && prevInputValue === undefined && !enableFetchOnFocus) return;
+      if (
+        Object.keys(options)?.length !== 0 &&
+        debouncedSearchTerm === "" &&
+        prevInputValue === undefined &&
+        !enableFetchOnFocus
+      )
+        return;
 
       const performSearch = async () => {
         setIsLoading(true);
         try {
-          const searchResults = onSearchSync ? onSearchSync(debouncedSearchTerm) : await onSearch?.(debouncedSearchTerm);
+          const searchResults = onSearchSync
+            ? onSearchSync(debouncedSearchTerm)
+            : await onSearch?.(debouncedSearchTerm);
 
           if (searchResults) {
             setOptions(transToGroupOption(searchResults, groupBy));
           }
         } catch (error) {
-          console.error('Search failed:', error);
+          console.error("Search failed:", error);
         } finally {
           setPrevInputValue(debouncedSearchTerm);
           setIsLoading(false);
@@ -303,10 +345,17 @@ const MultipleSelector = forwardRef(
       performSearch();
 
       return () => {
-        document.removeEventListener('mousedown', handleClickOutside);
+        document.removeEventListener("mousedown", handleClickOutside);
       };
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [debouncedSearchTerm, open, onSearchSync, onSearch, groupBy, handleClickOutside]);
+    }, [
+      debouncedSearchTerm,
+      open,
+      onSearchSync,
+      onSearch,
+      groupBy,
+      handleClickOutside,
+    ]);
 
     useEffect(() => {
       if (!optionsProp || onSearch) {
@@ -321,7 +370,10 @@ const MultipleSelector = forwardRef(
 
     const hasSearch = !!onSearchSync || !!onSearch || !!props.fetchNextPage;
 
-    const selectables = useMemo<GroupOption>(() => removePickedOption(options, selected), [options, selected]);
+    const selectables = useMemo<GroupOption>(
+      () => removePickedOption(options, selected),
+      [options, selected]
+    );
 
     const commandFilter = useCallback(() => {
       if (commandProps?.filter) {
@@ -342,12 +394,12 @@ const MultipleSelector = forwardRef(
           ref={dropdownRef}
           {...commandProps}
           className={cn(
-            'h-auto overflow-visible bg-transparent',
+            "h-auto overflow-visible bg-transparent",
             {
-              'bg-background': disabled || readOnly,
+              "bg-background": disabled || readOnly,
             },
 
-            commandProps?.className,
+            commandProps?.className
           )}
           shouldFilter={false}
           filter={commandFilter()}
@@ -356,12 +408,13 @@ const MultipleSelector = forwardRef(
           <PopoverAnchor>
             <div
               className={cn(
-                'border-input ring-offset-background focus-within:ring-ring min-h-10 rounded-md border text-sm focus-within:ring-2 focus-within:ring-offset-2',
+                "border-input ring-offset-background focus-within:ring-ring min-h-10 rounded-md border text-sm focus-within:ring-2 focus-within:ring-offset-2",
                 {
-                  'px-3 py-2': selected.length !== 0,
-                  'cursor-text': !disabled && selected.length !== 0 && !readOnly,
+                  "px-3 py-2": selected.length !== 0,
+                  "cursor-text":
+                    !disabled && selected.length !== 0 && !readOnly,
                 },
-                className,
+                className
               )}
               onClick={() => {
                 if (disabled || readOnly) return;
@@ -373,7 +426,7 @@ const MultipleSelector = forwardRef(
                 className="relative flex flex-wrap gap-1 pe-4 w-full"
                 data-testid={`${dataTestId}-selected-container`}
               >
-                {mode === 'multiple' ? (
+                {mode === "multiple" ? (
                   <MultipleSelectionInput
                     selected={selected}
                     badgeClassName={styleClasses?.badgeClassName}
@@ -383,29 +436,42 @@ const MultipleSelector = forwardRef(
                     renderCustomLabel={renderCustomLabel}
                   />
                 ) : (
-                  <div>{renderCustomValue?.(selected?.[0]) ?? selected?.[0]?.label ?? ''}</div>
+                  <div>
+                    {renderCustomValue?.(selected?.[0]) ??
+                      selected?.[0]?.label ??
+                      ""}
+                  </div>
                 )}
-                <CommandPrimitive.Input
-                  ref={inputRef}
-                  value={''}
-                  readOnly
-                  disabled={disabled || readOnly}
-                  onFocus={(event) => {
-                    setOpen(true);
-                    triggerSearchOnFocus && onSearch?.(debouncedSearchTerm);
-                    inputProps?.onFocus?.(event);
-                  }}
-                  placeholder={(mode === 'single' && selected?.length > 0) || disabled || readOnly ? '' : inputPlaceholder}
-                  className={cn(
-                    'placeholder:text-muted-foreground w-full flex-1 bg-transparent outline-none disabled:cursor-not-allowed disabled:opacity-50',
-                    {
-                      'px-3 py-2': selected.length === 0,
-                      'ml-1': selected.length !== 0,
-                    },
-                    inputProps?.className,
-                    readOnly && 'cursor-auto',
-                  )}
-                />
+                <div className="flex items-center gap-2 flex-1">
+                  {mainIcon && <div className="flex-shrink-0">{mainIcon}</div>}
+                  <CommandPrimitive.Input
+                    ref={inputRef}
+                    value={""}
+                    readOnly
+                    disabled={disabled || readOnly}
+                    onFocus={(event) => {
+                      setOpen(true);
+                      triggerSearchOnFocus && onSearch?.(debouncedSearchTerm);
+                      inputProps?.onFocus?.(event);
+                    }}
+                    placeholder={
+                      (mode === "single" && selected?.length > 0) ||
+                      disabled ||
+                      readOnly
+                        ? ""
+                        : inputPlaceholder
+                    }
+                    className={cn(
+                      "placeholder:text-muted-foreground w-full flex-1 bg-transparent outline-none disabled:cursor-not-allowed disabled:opacity-50",
+                      {
+                        "px-3 py-2": selected.length === 0,
+                        "ml-1": selected.length !== 0,
+                      },
+                      inputProps?.className,
+                      readOnly && "cursor-auto"
+                    )}
+                  />
+                </div>
 
                 <button
                   type="button"
@@ -413,13 +479,14 @@ const MultipleSelector = forwardRef(
                     handleRemoveAll(selected);
                   }}
                   className={cn(
-                    'absolute end-0 h-6 w-6 p-0',
+                    "absolute end-0 h-6 w-6 p-0",
                     (hideClearAllButton ||
                       disabled ||
                       readOnly ||
                       selected?.length < 1 ||
-                      selected?.filter((s) => s?.fixed).length === selected?.length) &&
-                      'hidden',
+                      selected?.filter((s) => s?.fixed).length ===
+                        selected?.length) &&
+                      "hidden"
                   )}
                 >
                   <X />
@@ -427,10 +494,7 @@ const MultipleSelector = forwardRef(
               </div>
             </div>
           </PopoverAnchor>
-          <div
-            className="relative"
-            data-testid={`${dataTestId}-list`}
-          >
+          <div className="relative" data-testid={`${dataTestId}-list`}>
             <ShowIf If={open}>
               <PopoverContent
                 noPortal
@@ -444,11 +508,13 @@ const MultipleSelector = forwardRef(
                     {(hasSearch || creatable) && (
                       <div className="flex items-center gap-2 border-b p-2">
                         <div>
-                          <img
-                            src={getS3Path('/icons/search-01.svg')}
-                            alt="search-icon"
-                            className={cn('text-muted-foreground h-5 w-5')}
-                          />
+                          {icon || (
+                            <img
+                              src={getS3Path("/icons/search-01.svg")}
+                              alt="search-icon"
+                              className={cn("text-muted-foreground h-5 w-5")}
+                            />
+                          )}
                         </div>
 
                         <CommandPrimitive.Input
@@ -464,12 +530,16 @@ const MultipleSelector = forwardRef(
                           }}
                           placeholder={
                             hidePlaceholderWhenSelected && selected.length !== 0
-                              ? ''
-                              : getInputPlaceholder(searchCreatePlaceholder, hasSearch, creatable)
+                              ? ""
+                              : getInputPlaceholder(
+                                  searchCreatePlaceholder,
+                                  hasSearch,
+                                  creatable
+                                )
                           }
                           className={cn(
-                            'placeholder:text-muted-foreground w-full flex-1 bg-transparent outline-none',
-                            styleClasses?.searchInputProps,
+                            "placeholder:text-muted-foreground w-full flex-1 bg-transparent outline-none",
+                            styleClasses?.searchInputProps
                           )}
                         />
                       </div>
@@ -496,7 +566,9 @@ const MultipleSelector = forwardRef(
                         dataTestId={dataTestId}
                       >
                         {creatable && (
-                          <div className={cn('mt-2 flex justify-start border-t')}>
+                          <div
+                            className={cn("mt-2 flex justify-start border-t")}
+                          >
                             <CreatableItem
                               inputValue={inputValue}
                               selected={selected}
@@ -521,7 +593,9 @@ const MultipleSelector = forwardRef(
                         >
                           {dropdowns?.map((option) => (
                             <CommandItem
-                              keywords={keywords?.map((keyword) => String(option[keyword]))}
+                              keywords={keywords?.map((keyword) =>
+                                String(option[keyword])
+                              )}
                               key={option.value}
                               value={option.value}
                               disabled={option.disable}
@@ -531,16 +605,22 @@ const MultipleSelector = forwardRef(
                                 e.stopPropagation();
                               }}
                               onSelect={() => {
-                                if (selected.length >= maxSelected && mode === 'multiple') {
+                                if (
+                                  selected.length >= maxSelected &&
+                                  mode === "multiple"
+                                ) {
                                   onMaxSelected?.(selected.length);
                                   return;
                                 }
 
-                                setInputValue('');
-                                const newOptions = mode === 'single' ? [option] : [...(selected || []), option];
+                                setInputValue("");
+                                const newOptions =
+                                  mode === "single"
+                                    ? [option]
+                                    : [...(selected || []), option];
                                 setSelected(newOptions);
                                 onChange?.(newOptions);
-                                if (mode === 'single') {
+                                if (mode === "single") {
                                   setTimeout(() => {
                                     setOpen(false);
                                     resetToInitial();
@@ -548,7 +628,11 @@ const MultipleSelector = forwardRef(
                                   }, 50);
                                 }
                               }}
-                              className={cn('cursor-pointer', option.disable && 'text-muted-foreground cursor-default')}
+                              className={cn(
+                                "cursor-pointer",
+                                option.disable &&
+                                  "text-muted-foreground cursor-default"
+                              )}
                             >
                               {renderCustomOption?.(option) ?? option.label}
                             </CommandItem>
@@ -560,7 +644,11 @@ const MultipleSelector = forwardRef(
 
                   {creatable && (
                     <CommandGroup className="sticky bottom-0 bg-white">
-                      <CommandItem className={cn('border-t p-0 text-sm hover:bg-transparent')}>
+                      <CommandItem
+                        className={cn(
+                          "border-t p-0 text-sm hover:bg-transparent"
+                        )}
+                      >
                         <CreatableItem
                           inputValue={inputValue}
                           selected={selected}
@@ -582,8 +670,8 @@ const MultipleSelector = forwardRef(
         </Command>
       </Popover>
     );
-  },
+  }
 );
 
-MultipleSelector.displayName = 'MultipleSelector';
+MultipleSelector.displayName = "MultipleSelector";
 export default MultipleSelector;

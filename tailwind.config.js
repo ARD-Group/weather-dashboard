@@ -24,6 +24,27 @@ module.exports = {
     },
     extend: {
       colors: {
+        primary: {
+          dark: "#444444",
+          light: "#D9D9D9",
+        },
+        secondary: {
+          dark: "#373636",
+          light: "#9E9E9E",
+        },
+        accent: {
+          green: "#4CBB17",
+          purple: "#443D64",
+          orange: "#F88508",
+          blue: "#6582C6",
+          cream: "#F6FAD9",
+          bluegray: "#466173",
+        },
+        base: {
+          black: "#111111",
+          white: "#FFFFFF",
+          dark: "#383838",
+        },
         background: "var(--background)",
         "card-bg": "var(--card-bg)",
         text: "var(--text)",

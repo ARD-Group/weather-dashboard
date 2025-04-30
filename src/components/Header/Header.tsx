@@ -2,12 +2,12 @@ import React from "react";
 
 import { ThemeToggle } from "../ThemeToggle";
 import { MultipleSelector } from "../../web-building-blocks/Atoms/MultipleSelector";
-import { Locate } from "lucide-react";
+import { Locate, Search } from "lucide-react";
 import { Button } from "../../web-building-blocks/Atoms";
 
 const Header: React.FC = () => {
   return (
-    <header className="flex items-center justify-between p-6 bg-gradient-to-b from-black/60 to-black/10">
+    <header className="flex items-center justify-between p-6 bg-gradient-to-b ">
       {/* Dark Mode Toggle */}
       <div className="flex flex-col items-center mr-4">
         <ThemeToggle />
@@ -29,6 +29,8 @@ const Header: React.FC = () => {
             searchInputProps:
               "bg-transparent w-full text-search-text placeholder-search-placeholder text-sm  outline-none border-none",
           }}
+          icon={<Search className="h-5 w-5" />}
+          mainIcon={<Search className="h-[46px] w-[48px] " />}
         />
       </div>
       {/* Current Location Button */}
