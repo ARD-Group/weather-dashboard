@@ -11,32 +11,29 @@ const Dashboard: React.FC = () => {
       <Header />
       <div className="container mx-auto">
         {/* Top row */}
-        <div className="grid grid-cols-2 gap-6 mb-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
           {/* City Time Card */}
-          <div>
-            <CityTimeCard city="Athens" time="09:03" date="Thursday, 31 Aug" />
-          </div>
+          <CityTimeCard city="Athens" time="09:03" date="Thursday, 31 Aug" />
 
           {/* Current Weather */}
-          <div>
-            <CurrentWeather
-              temperature={24}
-              feelsLike={22}
-              condition="Sunny"
-              sunrise="06:37 AM"
-              sunset="20:37 AM"
-              humidity={41}
-              windSpeed={2}
-              pressure={997}
-              uvIndex={8}
-            />
-          </div>
+
+          <CurrentWeather
+            temperature={24}
+            feelsLike={22}
+            condition="Sunny"
+            sunrise="06:37 AM"
+            sunset="20:37 AM"
+            humidity={41}
+            windSpeed={2}
+            pressure={997}
+            uvIndex={8}
+          />
         </div>
 
         {/* Bottom row */}
-        <div className="grid grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* 5 Days Forecast */}
-          <div>
+          <div className="lg:col-span-2">
             <ForecastCard
               days={[
                 {

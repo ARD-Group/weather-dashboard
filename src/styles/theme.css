@@ -95,10 +95,10 @@
 
 @layer base {
   body {
-    background: linear-gradient(110.05deg, #FFFFFF 0%, #383838 71.82%);
+    background: linear-gradient(113deg, #FFF 0.28%, #466173 130.65%);
   }
   .dark body {
-    background: linear-gradient(110.05deg, #383838 0%, #FFFFFF 71.82%);
+    background: linear-gradient(110deg, #444444 0%, #000000 130.82%);
   }
 }
 
@@ -135,6 +135,9 @@
 /* Typography */
 @layer base {
   h1, h2, h3, h4, h5, h6 {
+    @apply font-poppins text-text;
+  }
+  p {
     @apply font-poppins text-text;
   }
 }

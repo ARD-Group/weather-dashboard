@@ -24,9 +24,9 @@ export type TypographyVariants =
 const typographyVariants = cva("", {
   variants: {
     variant: {
-      title1: "text-[96px] font-bold leading-normal  font-['Poppins']",
+      title1: "font-poppins text-9xl font-bold leading-normal",
       title2: "text-[80px] font-bold leading-normal font-['Poppins']",
-      title3: "text-[36px] font-bold leading-normal  font-['Poppins']",
+      title3: " font-poppins text-3xl font-bold leading-normal",
       title4:
         "text-[32px] font-bold leading-normal  text-center font-['Poppins']",
       subtitle1:
@@ -36,8 +36,7 @@ const typographyVariants = cva("", {
       subtitle2: "text-[20px] font-normal leading-normal  font-['Poppins']",
       "subtitle2-strong":
         "text-[24px] font-bold leading-normal  font-['Poppins']",
-      body2:
-        "text-[16px] font-medium leading-normal  text-center font-['Poppins']",
+      body2: "font-poppins text-lg font-normal leading-normal",
       "body1-stronger": "text-sm leading-5 font-black",
       "body1-strong": "text-sm leading-5 font-semibold",
       body1: "text-[20px] font-semibold leading-normal  font-['Poppins']",

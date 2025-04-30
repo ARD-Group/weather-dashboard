@@ -9,17 +9,14 @@ interface CityTimeCardProps {
 
 const CityTimeCard: React.FC<CityTimeCardProps> = ({ city, time, date }) => {
   return (
-    <div className="w-full h-full text-center bg-card-bg rounded-panel shadow-panel">
-      <div className="relative">
-        {/* City name */}
-        <Typography variant="title3" className="">
-          {city}
-        </Typography>
-
+    <div className="w-full h-full text-center bg-card-bg rounded-panel shadow-panel p-12">
+      {/* City name */}
+      <Typography variant="title3" className="">
+        {city}
+      </Typography>
+      <div className="flex flex-col items-center justify-center -gap-10">
         {/* Time */}
-        <Typography variant="title1" className="">
-          {time}
-        </Typography>
+        <Typography variant="title1">{time}</Typography>
 
         {/* Date */}
         <Typography variant="body2" className="">

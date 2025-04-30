@@ -60,105 +60,100 @@ const CurrentWeather: React.FC<CurrentWeatherProps> = ({
   uvIndex,
 }) => {
   return (
-    <div className="w-[780px] h-[330px]">
-      <div className="w-full h-full bg-primary-dark dark:bg-base-black rounded-panel shadow-panel p-4 flex">
-        {/* Main Details - Left Section */}
-        <div className="w-[204px] flex flex-col justify-between">
-          {/* Temperature and Feels Like */}
-          <div>
-            <Typography
-              variant="title2"
-              className="text-base-white font-bold bg-gradient-to-r from-base-white to-transparent bg-clip-text text-transparent"
-            >
-              {temperature}°C
-            </Typography>
-
-            <div className="mt-4 opacity-80">
-              <div className="flex items-center">
-                <Typography variant="subtitle2" className="text-base-white">
-                  Feels like:
-                </Typography>
-                <Typography
-                  variant="subtitle1"
-                  className="text-base-white ml-2"
-                >
-                  {feelsLike}°C
-                </Typography>
-              </div>
-            </div>
-          </div>
-
-          {/* Sun Info */}
-          <div className="space-y-4">
-            {/* Sunrise */}
-            <div className="flex items-center">
-              <WiSunrise className="w-12 h-12 text-base-white" />
-              <div className="ml-3">
-                <Typography variant="subtitle2" className="text-base-white">
-                  Sunrise
-                </Typography>
-                <Typography
-                  variant="caption1"
-                  className="text-base-white font-semibold"
-                >
-                  {sunrise}
-                </Typography>
-              </div>
-            </div>
-
-            {/* Sunset */}
-            <div className="flex items-center">
-              <WiSunset className="w-12 h-12 text-base-white" />
-              <div className="ml-3">
-                <Typography variant="subtitle2" className="text-base-white">
-                  Sunset
-                </Typography>
-                <Typography
-                  variant="caption1"
-                  className="text-base-white font-semibold"
-                >
-                  {sunset}
-                </Typography>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Center Section - Weather Icon & Condition */}
-        <div className="flex-1 flex flex-col items-center justify-center relative">
-          <WiDaySunny className="w-[270px] h-[270px] text-base-white" />
+    <div className="w-full h-full text-center bg-card-bg rounded-panel shadow-panel p-12 w-full h-full rounded-panel shadow-panel p-4 flex">
+      {/* Main Details - Left Section */}
+      <div className="w-[204px] flex flex-col justify-between">
+        {/* Temperature and Feels Like */}
+        <div>
           <Typography
-            variant="subtitle1"
-            className="text-base-white font-semibold mt-4"
+            variant="title2"
+            className="text-base-white font-bold bg-gradient-to-r from-base-white to-transparent bg-clip-text text-transparent"
           >
-            {condition}
+            {temperature}°C
           </Typography>
+
+          <div className="mt-4 opacity-80">
+            <div className="flex items-center">
+              <Typography variant="subtitle2" className="text-base-white">
+                Feels like:
+              </Typography>
+              <Typography variant="subtitle1" className="text-base-white ml-2">
+                {feelsLike}°C
+              </Typography>
+            </div>
+          </div>
         </div>
 
-        {/* Right Section - Weather Metrics */}
-        <div className="w-[247px]">
-          <div className="grid grid-cols-2 gap-4">
-            <MetricBox
-              icon={<WiHumidity className="w-full h-full" />}
-              label="Humidity"
-              value={`${humidity}%`}
-            />
-            <MetricBox
-              icon={<WiStrongWind className="w-full h-full" />}
-              label="Wind Speed"
-              value={`${windSpeed}km/h`}
-            />
-            <MetricBox
-              icon={<WiBarometer className="w-full h-full" />}
-              label="Pressure"
-              value={`${pressure}hPa`}
-            />
-            <MetricBox
-              icon={<WiHot className="w-full h-full" />}
-              label="UV"
-              value={uvIndex.toString()}
-            />
+        {/* Sun Info */}
+        <div className="space-y-4">
+          {/* Sunrise */}
+          <div className="flex items-center">
+            <WiSunrise className="w-12 h-12 text-base-white" />
+            <div className="ml-3">
+              <Typography variant="subtitle2" className="text-base-white">
+                Sunrise
+              </Typography>
+              <Typography
+                variant="caption1"
+                className="text-base-white font-semibold"
+              >
+                {sunrise}
+              </Typography>
+            </div>
           </div>
+
+          {/* Sunset */}
+          <div className="flex items-center">
+            <WiSunset className="w-12 h-12 text-base-white" />
+            <div className="ml-3">
+              <Typography variant="subtitle2" className="text-base-white">
+                Sunset
+              </Typography>
+              <Typography
+                variant="caption1"
+                className="text-base-white font-semibold"
+              >
+                {sunset}
+              </Typography>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Center Section - Weather Icon & Condition */}
+      <div className="flex-1 flex flex-col items-center justify-center relative">
+        <WiDaySunny className="w-[270px] h-[270px] text-base-white" />
+        <Typography
+          variant="subtitle1"
+          className="text-base-white font-semibold mt-4"
+        >
+          {condition}
+        </Typography>
+      </div>
+
+      {/* Right Section - Weather Metrics */}
+      <div className="w-[247px]">
+        <div className="grid grid-cols-2 gap-4">
+          <MetricBox
+            icon={<WiHumidity className="w-full h-full" />}
+            label="Humidity"
+            value={`${humidity}%`}
+          />
+          <MetricBox
+            icon={<WiStrongWind className="w-full h-full" />}
+            label="Wind Speed"
+            value={`${windSpeed}km/h`}
+          />
+          <MetricBox
+            icon={<WiBarometer className="w-full h-full" />}
+            label="Pressure"
+            value={`${pressure}hPa`}
+          />
+          <MetricBox
+            icon={<WiHot className="w-full h-full" />}
+            label="UV"
+            value={uvIndex.toString()}
+          />
         </div>
       </div>
     </div>
