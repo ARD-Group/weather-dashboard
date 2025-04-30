@@ -11,10 +11,10 @@ export function ThemeToggle() {
       onCheckedChange={() => setTheme(theme === "light" ? "dark" : "light")}
       switchId="switch-1"
       styleClasses={{
-        root: "flex  flex-col items-center justify-center min-h-[80px]  rounded-lg p-4",
+        root: "flex flex-col items-center justify-center min-h-[80px] rounded-lg p-4",
         switch:
-          "w-24 h-9 relative  bg-mode-toggle-bg  transition-colors duration-300  data-[state=checked]:border-black data-[state=unchecked]:bg-gray-300",
-        label: "text-xs font-medium text-white mt-2",
+          "w-24 h-9 relative bg-mode-toggle-bg transition-colors duration-300 data-[state=checked]:bg-mode-toggle-bg data-[state=unchecked]:bg-mode-toggle-bg [&>span]:data-[state=checked]:translate-x-[60px] [&>span]:w-7 [&>span]:h-7 [&>span]:top-1 [&>span]:left-1",
+        label: "font-poppins text-sm font-extrabold text-text mt-2",
       }}
     />
   );
