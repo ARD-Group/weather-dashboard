@@ -21,9 +21,9 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [auth] = useAtom(authAtom);
 
-  if (!auth.isAuthenticated) {
-    return <Navigate to="/login" replace />;
-  }
+  // if (!auth.isAuthenticated) {
+  //   return <Navigate to="/login" replace />;
+  // }
 
   return <>{children}</>;
 };
