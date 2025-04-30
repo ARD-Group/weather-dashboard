@@ -3,11 +3,20 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@radix-ui/react-dialog": "^1.1.11",
+    "@radix-ui/react-popover": "^1.1.11",
+    "@tanstack/react-query": "^5.74.11",
     "@testing-library/react": "^16.3.0",
+    "@types/js-cookie": "^3.0.6",
     "@types/node": "^16.18.126",
+    "cmdk": "^1.1.1",
+    "jotai": "^2.12.3",
+    "js-cookie": "^3.0.5",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "react-router-dom": "^6.30.0",
     "react-scripts": "5.0.1",
+    "sonner": "^2.0.3",
     "typescript": "^4.9.5",
     "web-vitals": "^4.2.4"
   },
@@ -17,12 +26,15 @@
     "test": "react-scripts test",
     "test:ci": "react-scripts test --watchAll=false",
     "eject": "react-scripts eject",
-    "prepare": "husky"
+    "prepare": "husky",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "eslintConfig": {
     "extends": [
       "react-app",
-      "react-app/jest"
+      "react-app/jest",
+      "plugin:storybook/recommended"
     ]
   },
   "browserslist": {
@@ -44,18 +56,31 @@
     "@radix-ui/react-slot": "^1.2.0",
     "@radix-ui/react-switch": "^1.2.2",
     "@radix-ui/react-tabs": "^1.1.9",
+    "@storybook/addon-essentials": "^8.6.12",
+    "@storybook/addon-interactions": "^8.6.12",
+    "@storybook/addon-onboarding": "^8.6.12",
+    "@storybook/blocks": "^8.6.12",
+    "@storybook/preset-create-react-app": "^8.6.12",
     "@storybook/react": "^8.6.12",
+    "@storybook/react-webpack5": "^8.6.12",
+    "@storybook/test": "^8.6.12",
     "@testing-library/jest-dom": "^6.6.3",
     "@types/jest": "^27.5.2",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
     "autoprefixer": "^10.4.21",
+    "babel-jest": "^29.7.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "eslint-plugin-storybook": "^0.12.0",
     "husky": "^9.1.7",
     "lucide-react": "^0.503.0",
     "postcss": "^8.5.3",
+    "prop-types": "^15.8.1",
+    "storybook": "^8.6.12",
     "tailwind-merge": "^3.2.0",
-    "tailwindcss": "^3.4.17"
+    "tailwindcss": "^3.4.17",
+    "ts-jest": "^29.3.2",
+    "webpack": "^5.99.7"
   }
 }

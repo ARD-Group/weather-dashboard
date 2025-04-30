@@ -6,6 +6,7 @@ export * from "./Skeleton";
 export * from "./SvgIconWrapper";
 export * from "./ShowIf";
 export * from "./IconButton";
+export * from "./Switch";
 
 
 
