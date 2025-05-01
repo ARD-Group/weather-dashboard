@@ -18,8 +18,11 @@ interface ForecastCardProps {
   days: ForecastDay[];
 }
 
-const WeatherIcon: React.FC<{ type: ForecastDay["weather"] }> = ({ type }) => {
-  const iconProps = { className: "w-[60px] h-[60px] text-base-white" };
+const WeatherIcon: React.FC<{
+  type: ForecastDay["weather"];
+  className?: string;
+}> = ({ type, className }) => {
+  const iconProps = { className: `w-[60px] h-[60px] ${className}` };
 
   switch (type) {
     case "partly-cloudy":
@@ -39,12 +42,9 @@ const WeatherIcon: React.FC<{ type: ForecastDay["weather"] }> = ({ type }) => {
 
 const ForecastCard: React.FC<ForecastCardProps> = ({ days }) => {
   return (
-    <div className="w-full h-full bg-primary-dark dark:bg-base-black rounded-panel shadow-panel p-6">
+    <div className="w-full h-full text-center bg-card-bg  rounded-panel shadow-panel p-4 ">
       {/* Title */}
-      <Typography
-        variant="title4"
-        className="text-base-white font-bold ml-8 mb-6"
-      >
+      <Typography variant="title4" className="  ml-8 mb-6">
         5 Days Forecast
       </Typography>
 
@@ -54,14 +54,14 @@ const ForecastCard: React.FC<ForecastCardProps> = ({ days }) => {
           <div key={index} className="flex items-center h-[60px] mx-[30px]">
             {/* Weather Icon */}
             <div className="w-[60px]">
-              <WeatherIcon type={day.weather} />
+              <WeatherIcon type={day.weather} className="text-text" />
             </div>
 
             {/* Temperature */}
             <div className="w-full ">
               <Typography
                 variant="subtitle1"
-                className="text-base-white font-semibold text-center"
+                className=" font-semibold text-center"
               >
                 {day.temperature}°C
               </Typography>
@@ -69,10 +69,7 @@ const ForecastCard: React.FC<ForecastCardProps> = ({ days }) => {
 
             {/* Date */}
             <div className="w-full ml-[60px]">
-              <Typography
-                variant="subtitle2"
-                className="text-base-white font-semibold"
-              >
+              <Typography variant="subtitle2" className=" font-semibold">
                 {day.date}
               </Typography>
             </div>

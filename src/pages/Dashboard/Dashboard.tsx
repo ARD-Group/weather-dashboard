@@ -9,31 +9,33 @@ const Dashboard: React.FC = () => {
   return (
     <div className="min-h-screen bg-background-gradient ">
       <Header />
-      <div className="container mx-auto">
+      <div className="grid p-4 lg:p-14 xl:p-24 gap-12">
         {/* Top row */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-          {/* City Time Card */}
-          <CityTimeCard city="Athens" time="09:03" date="Thursday, 31 Aug" />
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-14 ">
+          <div className="lg:col-span-2">
+            {/* City Time Card */}
+            <CityTimeCard city="Athens" time="09:03" date="Thursday, 31 Aug" />
+          </div>
 
           {/* Current Weather */}
-
-          <CurrentWeather
-            temperature={24}
-            feelsLike={22}
-            condition="Sunny"
-            sunrise="06:37 AM"
-            sunset="20:37 AM"
-            humidity={41}
-            windSpeed={2}
-            pressure={997}
-            uvIndex={8}
-          />
+          <div className="lg:col-span-3">
+            <CurrentWeather
+              temperature={24}
+              feelsLike={22}
+              condition="Sunny"
+              sunrise="06:37 AM"
+              sunset="20:37 AM"
+              humidity={41}
+              windSpeed={2}
+              pressure={997}
+              uvIndex={8}
+            />
+          </div>
         </div>
 
-        {/* Bottom row */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* 5 Days Forecast */}
-          <div className="lg:col-span-2">
+        {/* Top row */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-14 ">
+          <div className="lg:col-span-4">
             <ForecastCard
               days={[
                 {
@@ -66,7 +68,7 @@ const Dashboard: React.FC = () => {
           </div>
 
           {/* Hourly Forecast */}
-          <div>
+          <div className="lg:col-span-8">
             <HourlyForecast
               hours={[
                 {
