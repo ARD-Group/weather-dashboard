@@ -2,7 +2,7 @@ import "./App.css";
 import "./index.css";
 import "./styles/theme.css";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -10,31 +10,40 @@ import {
   Navigate,
 } from "react-router-dom";
 import { useAtom } from "jotai";
-import { authAtom } from "./atoms/authAtom";
 import { Login, Signup, Dashboard } from "./pages";
 import OTPVerification from "./pages/OTPVerification/OTPVerification";
 import { Toaster } from "sonner";
 import { initializeAuth } from "./utils/tokenManager";
 import { ThemeProvider } from "./components/ThemeProvider";
+import { authAtom } from "./utils/authAtom";
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [auth] = useAtom(authAtom);
 
-  // if (!auth.isAuthenticated) {
-  //   return <Navigate to="/login" replace />;
-  // }
+  if (!auth.isAuthenticated) {
+    return <Navigate to="/login" replace />;
+  }
 
   return <>{children}</>;
 };
 
 function App() {
   const [, setAuth] = useAtom(authAtom);
+  const [isInitializing, setIsInitializing] = useState(true);
 
   useEffect(() => {
-    initializeAuth(setAuth);
+    const initAuth = async () => {
+      await initializeAuth(setAuth);
+      setIsInitializing(false);
+    };
+    initAuth();
   }, [setAuth]);
+
+  if (isInitializing) {
+    return <div>Loading...</div>; // You can replace this with a proper loading component
+  }
 
   return (
     <ThemeProvider defaultTheme="light" storageKey="weather-dashboard-theme">

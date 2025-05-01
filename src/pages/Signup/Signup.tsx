@@ -5,7 +5,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { Toast } from "../../web-building-blocks/Atoms/Toast/sonner/toast-sonner";
 import { saveTokens } from "../../utils/tokenManager";
 import { useAtom } from "jotai";
-import { authAtom } from "../../atoms/authAtom";
+import { authAtom } from "../../utils/authAtom";
 
 const Signup: React.FC = () => {
   const [name, setName] = useState("");

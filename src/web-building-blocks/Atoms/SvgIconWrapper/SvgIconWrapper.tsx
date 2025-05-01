@@ -1,6 +1,5 @@
-import { useEffect, useState } from 'react';
-import { cn } from '../../shadcnUI/lib/utils';
-
+import { useEffect, useState, useCallback } from "react";
+import { cn } from "../../shadcnUI/lib/utils";
 
 export interface SvgIconWrapperPropsBase {
   svgUrl: string;
@@ -12,12 +11,22 @@ export interface SvgIconWrapperPropsBase {
 }
 export type SvgIconWrapperProps = SvgIconWrapperPropsBase &
   (
-    | { colorType: 'css'; cssColor: string; tailwindColor?: never; svgColor?: { fill?: boolean; stroke?: boolean } }
-    | { colorType: 'tailwind'; cssColor?: never; tailwindColor: string; svgColor?: { fill?: boolean; stroke?: boolean } }
+    | {
+        colorType: "css";
+        cssColor: string;
+        tailwindColor?: never;
+        svgColor?: { fill?: boolean; stroke?: boolean };
+      }
+    | {
+        colorType: "tailwind";
+        cssColor?: never;
+        tailwindColor: string;
+        svgColor?: { fill?: boolean; stroke?: boolean };
+      }
   );
 
 const SvgIconWrapper = ({
-  dataTestId = 'Icon-wrapper-1',
+  dataTestId = "Icon-wrapper-1",
   styles,
   colorType,
   cssColor,
@@ -26,25 +35,29 @@ const SvgIconWrapper = ({
   svgColor = { fill: true, stroke: true },
   onClick,
 }: SvgIconWrapperProps) => {
-  const fetchAndColorSVG = async (url: string, color?: string) => {
-    try {
-      const response = await fetch(url);
-      const svgText = await response.text();
-      const parser = new DOMParser();
-      const svgDoc = parser.parseFromString(svgText, 'image/svg+xml');
-      const svgElement = svgDoc.documentElement;
-      const elementsWithStrokeOrFill = svgElement.querySelectorAll('[stroke], [fill]');
-      color &&
-        elementsWithStrokeOrFill.forEach((element) => {
-          svgColor?.stroke && element.setAttribute('stroke', color);
-          svgColor?.fill && element.setAttribute('fill', color);
-        });
-      return new XMLSerializer().serializeToString(svgElement);
-    } catch (error) {
-      console.error('Error fetching SVG:', error);
-      return null;
-    }
-  };
+  const fetchAndColorSVG = useCallback(
+    async (url: string, color?: string) => {
+      try {
+        const response = await fetch(url);
+        const svgText = await response.text();
+        const parser = new DOMParser();
+        const svgDoc = parser.parseFromString(svgText, "image/svg+xml");
+        const svgElement = svgDoc.documentElement;
+        const elementsWithStrokeOrFill =
+          svgElement.querySelectorAll("[stroke], [fill]");
+        color &&
+          elementsWithStrokeOrFill.forEach((element) => {
+            svgColor?.stroke && element.setAttribute("stroke", color);
+            svgColor?.fill && element.setAttribute("fill", color);
+          });
+        return new XMLSerializer().serializeToString(svgElement);
+      } catch (error) {
+        console.error("Error fetching SVG:", error);
+        return null;
+      }
+    },
+    [svgColor]
+  );
 
   const [svgContent, setSvgContent] = useState<string | null>(null);
 
@@ -52,9 +65,9 @@ const SvgIconWrapper = ({
     const loadSVG = async () => {
       let desiredColor: string | undefined;
 
-      if (colorType === 'css') {
+      if (colorType === "css") {
         desiredColor = cssColor;
-      } else if (colorType === 'tailwind' && tailwindColor) {
+      } else if (colorType === "tailwind" && tailwindColor) {
         desiredColor = tailwindColor;
       }
 
@@ -62,14 +75,17 @@ const SvgIconWrapper = ({
       setSvgContent(coloredSVG);
     };
     loadSVG();
-  }, [colorType, cssColor, tailwindColor, svgUrl]);
+  }, [colorType, cssColor, tailwindColor, svgUrl, fetchAndColorSVG]);
 
   return (
     <div
       onClick={onClick}
       data-testid={dataTestId}
-      className={cn('svg-container flex items-center justify-center', styles?.wrapper)}
-      dangerouslySetInnerHTML={{ __html: svgContent || '' }}
+      className={cn(
+        "svg-container flex items-center justify-center",
+        styles?.wrapper
+      )}
+      dangerouslySetInnerHTML={{ __html: svgContent || "" }}
     />
   );
 };

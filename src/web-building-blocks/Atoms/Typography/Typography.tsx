@@ -25,7 +25,7 @@ const typographyVariants = cva("", {
   variants: {
     variant: {
       title1: "font-poppins text-9xl font-bold leading-normal",
-      title2: "text-[80px] font-bold leading-normal font-['Poppins']",
+      title2: "text-[100px] font-bold leading-normal font-['Poppins']",
       title3: " font-poppins text-3xl font-bold leading-normal",
       title4:
         "text-[32px] font-bold leading-normal  text-center font-['Poppins']",

@@ -5,8 +5,18 @@ import { login, loginWithGoogle } from "../../apis/api/adapter";
 import { Toast } from "../../web-building-blocks/Atoms/Toast/sonner/toast-sonner";
 import { saveTokens } from "../../utils/tokenManager";
 import { useAtom } from "jotai";
-import { authAtom } from "../../atoms/authAtom";
+import { authAtom } from "../../utils/authAtom";
 
+export interface User {
+  email: string;
+  name?: string;
+}
+
+export interface AuthState {
+  isAuthenticated: boolean;
+  user: User | null;
+  isLoading: boolean;
+}
 const Login: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -119,32 +129,6 @@ const Login: React.FC = () => {
             />
           </div>
 
-          <div className="flex items-center justify-between">
-            <div className="flex items-center">
-              <input
-                id="remember-me"
-                name="remember-me"
-                type="checkbox"
-                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-              />
-              <label
-                htmlFor="remember-me"
-                className="ml-2 block text-sm text-gray-900"
-              >
-                Remember me
-              </label>
-            </div>
-
-            <div className="text-sm">
-              <Link
-                to="/forgot-password"
-                className="font-medium text-blue-600 hover:text-blue-500 transition-colors duration-300"
-              >
-                Forgot your password?
-              </Link>
-            </div>
-          </div>
-
           <Button
             buttonStyle={`w-full py-3 px-4 rounded-lg text-white font-medium transition-all duration-300 ${
               isLoading
@@ -184,7 +168,8 @@ const Login: React.FC = () => {
             )}
           </Button>
 
-          <div className="relative">
+          {/* TODO: Add Google login */}
+          {/* <div className="relative">
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t border-gray-300" />
             </div>
@@ -226,7 +211,7 @@ const Login: React.FC = () => {
               </svg>
               Sign in with Google
             </div>
-          </Button>
+          </Button> */}
         </form>
 
         <div className="text-center">
