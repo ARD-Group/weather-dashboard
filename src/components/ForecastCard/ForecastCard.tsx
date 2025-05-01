@@ -6,7 +6,7 @@ import {
   WiCloudy,
   WiRain,
 } from "react-icons/wi";
-import Typography from "../web-building-blocks/Atoms/Typography";
+import Typography from "../../web-building-blocks/Atoms/Typography";
 
 interface ForecastDay {
   date: string;
@@ -44,7 +44,7 @@ const ForecastCard: React.FC<ForecastCardProps> = ({ days }) => {
   return (
     <div className="w-full h-full text-center bg-card-bg  rounded-panel shadow-panel p-4 ">
       {/* Title */}
-      <Typography variant="title4" className="  ml-8 mb-6">
+      <Typography variant="title3" className="  text-center">
         5 Days Forecast
       </Typography>
 
@@ -53,14 +53,14 @@ const ForecastCard: React.FC<ForecastCardProps> = ({ days }) => {
         {days.map((day, index) => (
           <div key={index} className="flex items-center h-[60px] mx-[30px]">
             {/* Weather Icon */}
-            <div className="w-[60px]">
+            <div className="hidden xl:block w-[60px]">
               <WeatherIcon type={day.weather} className="text-text" />
             </div>
 
             {/* Temperature */}
             <div className="w-full ">
               <Typography
-                variant="subtitle1"
+                variant="title3"
                 className=" font-semibold text-center"
               >
                 {day.temperature}°C
@@ -68,8 +68,8 @@ const ForecastCard: React.FC<ForecastCardProps> = ({ days }) => {
             </div>
 
             {/* Date */}
-            <div className="w-full ml-[60px]">
-              <Typography variant="subtitle2" className=" font-semibold">
+            <div className="w-full ">
+              <Typography variant="title4" className=" font-semibold">
                 {day.date}
               </Typography>
             </div>

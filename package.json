@@ -17,7 +17,6 @@
     "react-icons": "^4.12.0",
     "react-router-dom": "^6.30.0",
     "react-scripts": "5.0.1",
-    "recoil": "^0.7.7",
     "sonner": "^2.0.3",
     "typescript": "^4.9.5",
     "web-vitals": "^4.2.4"
@@ -78,7 +77,6 @@
     "husky": "^9.1.7",
     "lucide-react": "^0.503.0",
     "postcss": "^8.5.3",
-    "prop-types": "^15.8.1",
     "storybook": "^8.6.12",
     "tailwind-merge": "^3.2.0",
     "tailwindcss": "^3.4.17",

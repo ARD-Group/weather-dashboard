@@ -12,4 +12,8 @@ export interface LoginResponse {
   refreshToken: string;
 }
 
-export interface RefreshTokenResponse {}
+export interface RefreshTokenResponse {
+  accessToken: string;
+  refreshToken: string;
+  expiresIn: number;
+}

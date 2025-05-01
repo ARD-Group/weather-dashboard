@@ -503,10 +503,10 @@ const MultipleSelector = forwardRef(
                 align="start"
                 className="p-0"
               >
-                <CommandList className="bg-popover text-popover-foreground animate-in start-0 top-1 z-10 w-full rounded-md border shadow-md outline-none">
-                  <div className="sticky top-0 z-10 bg-white">
+                <CommandList className="bg-popover text-popover-foreground animate-in start-0 top-1 z-10 w-full rounded-md text-search-text border shadow-md outline-none bg-search-bg ">
+                  <div className="sticky top-0 z-10 bg-search-bg text-search-text">
                     {(hasSearch || creatable) && (
-                      <div className="flex items-center gap-2 border-b p-2">
+                      <div className="flex items-center gap-2 border-b p-2 text-search-text">
                         <div>
                           {icon || (
                             <img
@@ -538,7 +538,7 @@ const MultipleSelector = forwardRef(
                                 )
                           }
                           className={cn(
-                            "placeholder:text-muted-foreground w-full flex-1 bg-transparent outline-none",
+                            "placeholder:text-muted-foreground text-search-text w-full flex-1 bg-search-bg outline-none",
                             styleClasses?.searchInputProps
                           )}
                         />
@@ -643,7 +643,7 @@ const MultipleSelector = forwardRef(
                   </APIPagination>
 
                   {creatable && (
-                    <CommandGroup className="sticky bottom-0 bg-white">
+                    <CommandGroup className="sticky bottom-0 search-bg">
                       <CommandItem
                         className={cn(
                           "border-t p-0 text-sm hover:bg-transparent"

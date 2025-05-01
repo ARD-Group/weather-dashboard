@@ -1,15 +1,15 @@
 import React from "react";
 import CityTimeCard from "../../components/CityTimeCard";
+import { Header } from "../../components";
+import CurrentWeather from "../../components/CurrentWeather";
 import ForecastCard from "../../components/ForecastCard";
 import HourlyForecast from "../../components/HourlyForecast";
-import CurrentWeather from "../../components/CurrentWeather";
-import { Header } from "../../components/Header";
 
 const Dashboard: React.FC = () => {
   return (
     <div className="min-h-screen bg-background-gradient ">
       <Header />
-      <div className="grid p-4 lg:p-14 xl:p-24 gap-12">
+      <div className="grid px-4 lg:px-14 xl:px-24 gap-12">
         {/* Top row */}
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-14 ">
           <div className="lg:col-span-2">

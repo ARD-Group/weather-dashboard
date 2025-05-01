@@ -1,5 +1,5 @@
+import { Typography } from "../../web-building-blocks/Atoms";
 import React from "react";
-import Typography from "../web-building-blocks/Atoms/Typography";
 
 interface CityTimeCardProps {
   city: string;
