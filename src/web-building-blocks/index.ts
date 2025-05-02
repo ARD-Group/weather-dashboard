@@ -1,3 +1,3 @@
-import './style.css';
-export * from './Atoms';
-export * from './Molecules';
+export * from "./Atoms";
+export * from "./Molecules";
+export * from "./utils/time";

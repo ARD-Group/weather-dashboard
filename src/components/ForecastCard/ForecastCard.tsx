@@ -7,19 +7,24 @@ import {
   WiRain,
 } from "react-icons/wi";
 import Typography from "../../web-building-blocks/Atoms/Typography";
+import { getDate } from "../../web-building-blocks/utils/time";
 
 interface ForecastDay {
   date: string;
-  temperature: number;
-  weather: "partly-cloudy" | "mostly-cloudy" | "sunny" | "cloudy" | "rainy";
+  max_temp_c: number;
+  min_temp_c: number;
+  avg_temp_c: number;
+  condition: string;
+  icon: string;
 }
 
 interface ForecastCardProps {
-  days: ForecastDay[];
+  data: ForecastDay[];
+  loading: boolean;
 }
 
 const WeatherIcon: React.FC<{
-  type: ForecastDay["weather"];
+  type: ForecastDay["condition"];
   className?: string;
 }> = ({ type, className }) => {
   const iconProps = { className: `w-[60px] h-[60px] ${className}` };
@@ -40,7 +45,17 @@ const WeatherIcon: React.FC<{
   }
 };
 
-const ForecastCard: React.FC<ForecastCardProps> = ({ days }) => {
+const ForecastCard: React.FC<ForecastCardProps> = ({ data, loading }) => {
+  if (loading) {
+    return (
+      <div className="w-full h-full text-center bg-card-bg  rounded-panel shadow-panel p-4 ">
+        <Typography variant="title3" className="  text-center">
+          5 Days Forecast
+        </Typography>
+      </div>
+    );
+  }
+
   return (
     <div className="w-full h-full text-center bg-card-bg  rounded-panel shadow-panel p-4 ">
       {/* Title */}
@@ -50,31 +65,32 @@ const ForecastCard: React.FC<ForecastCardProps> = ({ days }) => {
 
       {/* Forecast Days */}
       <div className="space-y-4">
-        {days.map((day, index) => (
-          <div key={index} className="flex items-center h-[60px] mx-[30px]">
-            {/* Weather Icon */}
-            <div className="hidden xl:block w-[60px]">
-              <WeatherIcon type={day.weather} className="text-text" />
-            </div>
+        {data.map((day, index) => {
+          const { avg_temp_c, condition, icon, date } = day;
+          return (
+            <div key={index} className="flex items-center h-[60px] mx-[30px]">
+              {/* Weather Icon */}
+                <img src={icon} alt={condition} className="w-[60px] h-[60px]" />
 
-            {/* Temperature */}
-            <div className="w-full ">
-              <Typography
-                variant="title3"
-                className=" font-semibold text-center"
-              >
-                {day.temperature}°C
-              </Typography>
-            </div>
+              {/* Temperature */}
+              <div className="w-full ">
+                <Typography
+                  variant="title3"
+                  className=" font-semibold text-center"
+                >
+                  {Math.round(avg_temp_c)}°C
+                </Typography>
+              </div>
 
-            {/* Date */}
-            <div className="w-full ">
-              <Typography variant="title4" className=" font-semibold">
-                {day.date}
-              </Typography>
+              {/* Date */}
+              <div className="w-full ">
+                <Typography variant="title4" className=" font-semibold">
+                  {getDate(date)}
+                </Typography>
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

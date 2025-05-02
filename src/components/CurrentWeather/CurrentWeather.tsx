@@ -11,15 +11,22 @@ import {
 import Typography from "../../web-building-blocks/Atoms/Typography";
 
 interface CurrentWeatherProps {
-  temperature: number;
-  feelsLike: number;
-  condition: string;
-  sunrise: string;
-  sunset: string;
-  humidity: number;
-  windSpeed: number;
-  pressure: number;
-  uvIndex: number;
+  data: {
+    temp_c: number;
+    feels_like_c: number;
+    condition: string;
+    humidity: number;
+    wind_kph: number;
+    pressure_mb: number;
+    uv: number;
+    icon: string;
+    is_day: number;
+    astronomy: {
+      sunrise: string;
+      sunset: string;
+    };
+  };
+  loading: boolean;
 }
 
 const MetricBox: React.FC<{
@@ -43,17 +50,19 @@ const MetricBox: React.FC<{
   </div>
 );
 
-const CurrentWeather: React.FC<CurrentWeatherProps> = ({
-  temperature,
-  feelsLike,
-  condition,
-  sunrise,
-  sunset,
-  humidity,
-  windSpeed,
-  pressure,
-  uvIndex,
-}) => {
+const CurrentWeather: React.FC<CurrentWeatherProps> = ({ data, loading }) => {
+  const {
+    temp_c,
+    feels_like_c,
+    condition,
+    humidity,
+    astronomy,
+    wind_kph,
+    pressure_mb,
+    uv,
+    icon,
+    is_day,
+  } = data;
   return (
     <div className="w-full h-full text-center bg-card-bg rounded-panel shadow-panel p-6">
       <div className="flex flex-col lg:flex-row">
@@ -65,14 +74,14 @@ const CurrentWeather: React.FC<CurrentWeatherProps> = ({
               variant="title2"
               className="bg-gradient-to-r from-base-black dark:from-base-white to-transparent bg-clip-text text-transparent"
             >
-              {temperature}°C
+              {Math.round(temp_c)}°C
             </Typography>
 
             <div className=" opacity-80">
               <div className="flex items-center justify-center lg:justify-start">
                 <Typography variant="subtitle2">Feels like:</Typography>
                 <Typography variant="title3" className="ml-2">
-                  {feelsLike}°C
+                  {Math.round(feels_like_c)}°C
                 </Typography>
               </div>
             </div>
@@ -88,7 +97,7 @@ const CurrentWeather: React.FC<CurrentWeatherProps> = ({
                   Sunrise
                 </Typography>
                 <Typography variant="caption1" className="font-semibold">
-                  {sunrise}
+                  {astronomy.sunrise}
                 </Typography>
               </div>
             </div>
@@ -101,7 +110,7 @@ const CurrentWeather: React.FC<CurrentWeatherProps> = ({
                   Sunset
                 </Typography>
                 <Typography variant="caption1" className="font-semibold">
-                  {sunset}
+                  {astronomy.sunset}
                 </Typography>
               </div>
             </div>
@@ -111,7 +120,11 @@ const CurrentWeather: React.FC<CurrentWeatherProps> = ({
         {/* Center Section - Weather Icon & Condition */}
         <div className="flex-1 flex flex-col items-center justify-center relative mb-6 lg:mb-0">
           <div className="w-48 h-48 md:w-56 md:h-56 lg:w-64 lg:h-64">
-            <WiDaySunny className="w-full h-full text-text" />
+            <img
+              src={icon.replaceAll("64", "128")}
+              alt={condition}
+              style={{ width: 290, height: 290 }}
+            />
           </div>
           <Typography variant="title3">{condition}</Typography>
         </div>
@@ -127,17 +140,17 @@ const CurrentWeather: React.FC<CurrentWeatherProps> = ({
             <MetricBox
               icon={<WiStrongWind className="w-full h-full text-text" />}
               label="Wind Speed"
-              value={`${windSpeed}km/h`}
+              value={`${wind_kph}km/h`}
             />
             <MetricBox
               icon={<WiBarometer className="w-full h-full text-text" />}
               label="Pressure"
-              value={`${pressure}hPa`}
+              value={`${pressure_mb}hPa`}
             />
             <MetricBox
               icon={<WiHot className="w-full h-full text-text" />}
               label="UV"
-              value={uvIndex.toString()}
+              value={uv.toString()}
             />
           </div>
         </div>
