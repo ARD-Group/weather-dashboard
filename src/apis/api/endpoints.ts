@@ -1,4 +1,10 @@
-import { LoginResponse, SignUpResponse, VerifyEmailResponse } from "./types";
+import {
+  LoginResponse,
+  SignUpResponse,
+  VerifyEmailResponse,
+  WeatherCurrentResponse,
+  WeatherSearchResponse,
+} from "./types";
 import API from "../config";
 import { ApiResShape, Response } from "../shared.apis";
 
@@ -62,6 +68,27 @@ export const loginWithGoogleEndpoint = async (args: {
   const response = await API.post<Response<LoginResponse>>(
     "/public/auth/login/social/google",
     args
+  );
+  return response;
+};
+
+export const weatherSearchEndpoint = async (args: {
+  q: string;
+}): Promise<ApiResShape<WeatherSearchResponse[]>> => {
+  const response = await API.get<Response<WeatherSearchResponse[]>>(
+    "/weather/search",
+    {
+      params: args,
+    }
+  );
+  return response;
+};
+
+export const weatherCurrentEndpoint = async (args: {
+  location: string;
+}): Promise<ApiResShape<WeatherCurrentResponse>> => {
+  const response = await API.get<Response<WeatherCurrentResponse>>(
+    `/weather/forecast/${args.location}`
   );
   return response;
 };
