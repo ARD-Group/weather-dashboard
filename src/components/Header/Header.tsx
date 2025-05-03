@@ -72,16 +72,14 @@ const Header: React.FC<HeaderProps> = ({ setCurrentLocation }) => {
   };
 
   return (
-    <header className="flex flex-col sm:flex-row items-center justify-between p-4 md:px-14 xl:px-24 sm:p-6 bg-gradient-to-b gap-4 sm:gap-0">
-      {/* Dark Mode Toggle */}
-      <div className="flex  items-center sm:mr-4 ">
+<header className="flex flex-col gap-4  sm:p-6 md:flex-row items-center md:justify-between md:px-14 xl:px-24 p-4 bg-gradient-to-b">
+{/* Left: Theme Toggle */}
+      <div className="flex items-center sm:mr-4 w-full sm:w-auto justify-between sm:justify-start">
         <ThemeToggle />
-         {/* Logout Button */}
-
       </div>
-     
-      {/* Search Bar */}
-      <div className="w-full sm:w-[60%] lg:w-[50%]">
+  
+      {/* Middle: Search Bar */}
+      <div className="w-full  lg:w-[50%]">
         <MultipleSelector
           mode="single"
           emptyIndicator={searchLoading ? "Loading..." : "No results found"}
@@ -119,37 +117,38 @@ const Header: React.FC<HeaderProps> = ({ setCurrentLocation }) => {
           mainIcon={<IoSearchOutline className="h-[46px] w-[48px]" />}
         />
       </div>
-
-      {/* Current Location Button */}
-      <div className="flex  items-center sm:mr-4">
-      <Button
-        dataTestId="button-1"
-        buttonStyle="current-location-btn w-full sm:w-[200px] lg:w-[260px] h-[62px] flex justify-center rounded-full bg-current-location-bg text-current-location-text font-semibold text-base shadow-button hover:bg-green-600 transition-colors duration-200"
-        onClick={handleCurrentLocation}
-        disabled={currentLocationLoading}
-      >
-        <div className="flex justify-evenly items-center gap-2">
-          {currentLocationLoading ? (
-            <Spinner size="medium" />
-          ) : (
-            <>
-              <Icon name="currentLocation" size={35} />
-              <Typography variant="subtitle1" className="mx-2 text-primary-light font-extrabold">
-                Current Location
-              </Typography>
-            </>
-          )}
-        </div>
-      </Button>
-      <Button
-        buttonStyle="logout-btn  w-full  sm:w-[120px] h-[48px] flex justify-center rounded-full bg-red-500 text-white font-semibold text-base shadow-button hover:bg-red-600 transition-colors duration-200 ml-2"
-        onClick={handleLogout}
-      >
-        Logout
-      </Button>
+  
+      {/* Right: Current Location & Logout */}
+      <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-0 sm:mr-4 w-full sm:w-auto">
+        <Button
+          dataTestId="button-1"
+          buttonStyle="current-location-btn w-full sm:w-[200px] lg:w-[260px] h-[62px] flex justify-center rounded-full bg-current-location-bg text-current-location-text font-semibold text-base shadow-button hover:bg-green-600 transition-colors duration-200"
+          onClick={handleCurrentLocation}
+          disabled={currentLocationLoading}
+        >
+          <div className="flex justify-evenly items-center gap-2">
+            {currentLocationLoading ? (
+              <Spinner size="medium" />
+            ) : (
+              <>
+                <Icon name="currentLocation" size={35} />
+                <Typography variant="subtitle1" className="mx-2 text-primary-light font-extrabold">
+                  Current Location
+                </Typography>
+              </>
+            )}
+          </div>
+        </Button>
+        <Button
+          buttonStyle="logout-btn w-full sm:w-[120px] h-[48px] flex justify-center rounded-full bg-red-500 text-white font-semibold text-base shadow-button hover:bg-red-600 transition-colors duration-200 sm:ml-2"
+          onClick={handleLogout}
+        >
+          Logout
+        </Button>
       </div>
     </header>
   );
+  
 };
 
 export default Header;
