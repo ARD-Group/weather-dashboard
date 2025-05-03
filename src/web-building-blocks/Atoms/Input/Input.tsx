@@ -1,8 +1,8 @@
-import { forwardRef, useState } from 'react';
-import { Input as ShadcnInput } from '../../shadcnUI/components/ui/input';
-import ShowIf from '../ShowIf';
-import { cn } from '../../shadcnUI/lib/utils';
-import Typography from '../Typography';
+import { forwardRef, useState } from "react";
+import { Input as ShadcnInput } from "../../shadcnUI/components/ui/input";
+import ShowIf from "../ShowIf";
+import { cn } from "../../shadcnUI/lib/utils";
+import Typography from "../Typography";
 
 type StyleClasses = {
   root?: string;
@@ -13,7 +13,8 @@ type StyleClasses = {
   postfixWrapper?: string;
 };
 
-export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+export interface InputProps
+  extends React.InputHTMLAttributes<HTMLInputElement> {
   /** The label of the input */
   label?: string;
   /** The current error message of the input */
@@ -58,13 +59,13 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     {
       label,
       error,
-      type = 'text',
+      type = "text",
       inputId,
       isLoading = false,
       disabled,
       isOptional,
       onChangeHandler,
-      dataTestId = 'input',
+      dataTestId = "input",
       inputStyles,
       styleClasses,
       placeholder,
@@ -72,7 +73,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       postfix,
       ...props
     },
-    ref,
+    ref
   ) => {
     const [value, setValue] = useState<string>();
 
@@ -84,21 +85,26 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
 
     return (
       <div
-        className={cn('flex w-full max-w-sm flex-col gap-1.5', inputStyles?.root, styleClasses?.root)}
+        className={cn(
+          "flex w-full max-w-sm flex-col gap-1.5",
+          inputStyles?.root,
+          styleClasses?.root
+        )}
         data-testid={`${dataTestId}-root`}
       >
         <ShowIf If={!!label}>
           <label
-            className={cn('text-primary flex items-center gap-1 text-sm capitalize', inputStyles?.label, styleClasses?.label)}
+            className={cn(
+              "text-primary flex items-center gap-1 text-sm capitalize",
+              inputStyles?.label,
+              styleClasses?.label
+            )}
             data-testid={`${dataTestId}-label`}
-            htmlFor={internalInputId ?? ''}
+            htmlFor={internalInputId ?? ""}
           >
             {label}
             {isOptional && (
-              <Typography
-                variant="caption1"
-                className={cn('text-neutral4')}
-              >
+              <Typography variant="caption1" className={cn("text-neutral4")}>
                 (Optional)
               </Typography>
             )}
@@ -106,18 +112,18 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         </ShowIf>
         <div
           className={cn(
-            'focus-within:ring-primary bg-background focus-within:border-primary items-center justify-center p-0',
-            'border-input ring-offset-background file:text-foreground placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border text-base file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm',
+            "focus-within:ring-primary  focus-within:border-primary items-center justify-center p-0",
+            "border-input  file:text-foreground placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border  file:border-0  file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
             inputStyles?.input,
-            styleClasses?.input,
+            styleClasses?.input
           )}
           data-testid={`${dataTestId}-wrapper`}
         >
           {prefix && (
             <div
               className={cn(
-                'text-neutral6 bg-neutral1 me-1 flex h-full items-center justify-center rounded-s-md px-3 text-sm',
-                styleClasses?.prefixWrapper,
+                "text-neutral6  me-1 flex h-full items-center justify-center rounded-s-md px-3 text-sm",
+                styleClasses?.prefixWrapper
               )}
             >
               {prefix}
@@ -125,7 +131,9 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           )}
           <ShadcnInput
             placeholder={placeholder}
-            className={cn('focus:none h-full w-full border-none bg-inherit focus:outline-none focus-visible:ring-0 focus-visible:ring-offset-0')}
+            className={cn(
+              "focus:none h-full w-full border-none  focus:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
+            )}
             value={value}
             disabled={disabled || isLoading}
             onChange={onChange}
@@ -138,8 +146,8 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           {postfix && (
             <div
               className={cn(
-                'text-neutral6 bg-neutral1 ms-1 flex h-full items-center justify-center rounded-e-md px-3 text-sm',
-                styleClasses?.postfixWrapper,
+                "text-neutral6  ms-1 flex h-full items-center justify-center rounded-e-md px-3 text-sm",
+                styleClasses?.postfixWrapper
               )}
             >
               {postfix}
@@ -149,25 +157,25 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
 
         <ShowIf If={isLoading}>
           <label
-            className={cn('text-neutral3 flex justify-start text-xs')}
+            className={cn("text-neutral3 flex justify-start text-xs")}
             data-testid={`${dataTestId}-loading`}
-            htmlFor={internalInputId ?? ''}
+            htmlFor={internalInputId ?? ""}
           >
             Loading...
           </label>
         </ShowIf>
         <ShowIf If={!!error}>
           <label
-            className={cn('text-negative5 text-sm', styleClasses?.error)}
+            className={cn("text-negative5 text-sm", styleClasses?.error)}
             data-testid={`${dataTestId}-error`}
-            htmlFor={internalInputId ?? ''}
+            htmlFor={internalInputId ?? ""}
           >
             {error}
           </label>
         </ShowIf>
       </div>
     );
-  },
+  }
 );
-Input.displayName = 'Input';
+Input.displayName = "Input";
 export default Input;

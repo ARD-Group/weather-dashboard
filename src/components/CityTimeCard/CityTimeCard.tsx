@@ -1,6 +1,5 @@
-import { Typography } from "../../web-building-blocks/Atoms";
-import { getTime,getDate } from "../../web-building-blocks/utils/time";
-
+import { Skeleton, Typography } from "../../web-building-blocks/Atoms";
+import { getTime, getDate } from "../../web-building-blocks/utils/time";
 import React from "react";
 
 interface CityTimeCardProps {
@@ -15,27 +14,42 @@ interface CityTimeCardProps {
 
 const CityTimeCard: React.FC<CityTimeCardProps> = ({ data, loading }) => {
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <Skeleton
+        styleClasses={{
+          skeleton: 'w-auto h-[330px] p-12 rounded-panel shadow-panel'
+        }}
+      />
+    );
   }
 
   const { name, localtime, tz } = data;
-  console.log('getTime(localtime, tz)',getTime(localtime, tz),localtime,tz);
   
   return (
-    <div className="w-full h-full text-center bg-card-bg rounded-panel shadow-panel p-12">
+    <div className="w-auto h-[330px] text-center bg-card-bg rounded-panel shadow-panel p-12">
       {/* City name */}
-      <Typography variant="title3" className="">
+      <Typography 
+        variant="title3" 
+        className="text-text mb-4"
+      >
         {name}
       </Typography>
-      <div className="flex flex-col items-center justify-center -gap-10">
-        {/* Time */}
-        <Typography variant="title1">{getTime(localtime, tz)}</Typography>
 
-        {/* Date */}
-        <Typography variant="body2" className="">
-          {getDate(localtime, tz)}
-        </Typography>
-      </div>
+      {/* Time */}
+      <Typography 
+        variant="title1" 
+        className=" text-text mb-2"
+      >
+        {getTime(localtime, tz)}
+      </Typography>
+
+      {/* Date */}
+      <Typography 
+        variant="body2" 
+        className="-m-7"
+      >
+        {getDate(localtime, tz)}
+      </Typography>
     </div>
   );
 };

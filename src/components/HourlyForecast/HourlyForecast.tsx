@@ -1,58 +1,17 @@
-import React from "react";
-import { WiDaySunny, WiDayCloudy } from "react-icons/wi";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import Typography from "../../web-building-blocks/Atoms/Typography";
 import { getTime } from "../../web-building-blocks";
-
-interface HourlyData {
-  time: string;
-  temp_c: number;
-  condition: string;
-  wind_kph: number;
-  icon: string;
-  is_day: number;
-  wind_dir:
-    | "N"
-    | "NNE"
-    | "NE"
-    | "ENE"
-    | "E"
-    | "ESE"
-    | "SE"
-    | "SSE"
-    | "S"
-    | "SSW"
-    | "SW"
-    | "WSW"
-    | "W"
-    | "WNW"
-    | "NW"
-    | "NNW";
-}
+import { Skeleton } from "../../web-building-blocks/Atoms";
+import Icon from "../../utils/Icon";
+import { HourlyForecastResponse } from "../../apis/api/types";
 
 interface HourlyForecastProps {
-  data: HourlyData[];
+  data: HourlyForecastResponse[];
   loading: boolean;
 }
 
-const WeatherIcon: React.FC<{ type: HourlyData["condition"] }> = ({ type }) => {
-  const iconProps = {
-    className: "w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 text-text",
-  };
-
-  switch (type) {
-    case "sunny":
-      return <WiDaySunny {...iconProps} />;
-    case "partly-cloudy":
-      return <WiDayCloudy {...iconProps} />;
-    default:
-      return null;
-  }
-};
-
-const WindArrow: React.FC<{ direction: HourlyData["wind_dir"] }> = ({
-  direction,
-}) => {
-  const getRotation = () => {
+const HourCard: React.FC<HourlyForecastResponse> = (data) => {
+  const getRotation = (direction: HourlyForecastResponse["wind_dir"]) => {
     const directions = {
       N: 0,
       NNE: 22.5,
@@ -74,70 +33,143 @@ const WindArrow: React.FC<{ direction: HourlyData["wind_dir"] }> = ({
 
     return directions[direction];
   };
-
+  const { time, temp_c, condition, wind_kph, icon, wind_dir, is_day } = data;
   return (
     <div
-      className="w-10 h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 flex items-center justify-center"
-      style={{ transform: `rotate(${getRotation()}deg)` }}
+      className={`w-32 h-[270px] ${
+        is_day ? "hourly-card-bg-is-day" : "hourly-card-bg"
+      }  rounded-card flex flex-col items-center flex-shrink-0 transition-transform duration-200 `}
     >
-      <div className=" text-2xl md:text-3xl lg:text-4xl text-text">▲</div>
-    </div>
-  );
-};
-
-const HourCard: React.FC<HourlyData> = (data) => {
-  const { time, temp_c, condition, wind_kph, icon, is_day, wind_dir } = data;
-  return (
-
-    <div className="w-20 sm:w-24 md:w-28 lg:w-32 h-full bg-secondary-light dark:bg-secondary-dark rounded-card flex flex-col items-center flex-shrink-0">
       {/* Hour */}
-      <Typography variant="subtitle1" className=" font-bold mt-2 md:mt-3">
+      <Typography variant="subtitle2-strong" className="font-bold mt-2 md:mt-3">
         {getTime(time)}
       </Typography>
 
       {/* Weather Icon */}
-      <div className="mt-2 md:mt-4 lg:mt-6">
-        <img src={icon} alt={condition} />
+      <div className="">
+        <img src={icon} alt={condition} className="w-[90px] h-[90px]" />
       </div>
 
       {/* Temperature */}
-      <Typography variant="subtitle2" className=" font-bold mt-1">
-        {temp_c}°C
+      <Typography variant="subtitle2" className="font-bold mt-1">
+        {Math.round(temp_c)}°C
       </Typography>
 
       {/* Wind Direction */}
       <div className="mt-1 md:mt-2">
-        <WindArrow direction={wind_dir} />
+        <Icon name="navigation" size={55} direction={getRotation(wind_dir)} />
       </div>
 
       {/* Wind Speed */}
-      <Typography variant="subtitle2" className=" font-bold mt-1 md:mt-2 mb-2">
-        {wind_kph}km/h
+      <Typography variant="subtitle2" className="font-bold  ">
+        {Math.round(wind_kph)}km/h
       </Typography>
     </div>
   );
 };
 
 const HourlyForecast: React.FC<HourlyForecastProps> = ({ data, loading }) => {
+  // State for tracking mouse position and scrolling
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  // Mouse event handlers for drag scrolling
+  const handleMouseDown = (e: React.MouseEvent) => {
+    const scrollContainer = scrollContainerRef.current;
+    if (!scrollContainer) return;
+    setIsDragging(true);
+    setStartX(e.pageX - scrollContainer.offsetLeft);
+    setScrollLeft(scrollContainer.scrollLeft);
+    // Add cursor grabbing class
+    scrollContainer.classList.add("cursor-grabbing");
+    document.body.classList.add("select-none");
+  };
+
+  const handleMouseMove = useCallback(
+    (e: MouseEvent) => {
+      const scrollContainer = scrollContainerRef.current;
+      if (!isDragging || !scrollContainer) return;
+      e.preventDefault();
+      const x = e.pageX - scrollContainer.offsetLeft;
+      const walk = (x - startX) * 2; // Increased scroll speed multiplier for smoother feel
+      scrollContainer.scrollLeft = scrollLeft - walk;
+    },
+    [isDragging, startX, scrollLeft]
+  );
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.classList.remove("cursor-grabbing");
+    }
+    document.body.classList.remove("select-none");
+  };
+
+  // Add and remove event listeners
+  useEffect(() => {
+    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mouseup", handleMouseUp);
+    document.addEventListener("mouseleave", handleMouseUp);
+
+    return () => {
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
+      document.removeEventListener("mouseleave", handleMouseUp);
+    };
+  }, [isDragging, startX, scrollLeft, handleMouseMove]);
+
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <Skeleton
+        styleClasses={{
+          skeleton: "w-auto h-[366px] p-12 rounded-panel shadow-panel",
+        }}
+      />
+    );
   }
 
   return (
-    <div className="w-full h-full text-center bg-card-bg rounded-panel shadow-panel p-2 md:p-4">
-      <div className="flex flex-col h-full">
+    <div className="w-auto h-[366px] text-center bg-card-bg rounded-panel shadow-panel p-2 md:p-4">
+      <div className="flex flex-col h-full lg:px-20">
         {/* Title */}
-        <div className="flex justify-center mb-4 md:mb-6 lg:mb-12">
-          <Typography variant="title3" className=" font-bold">
-            Hourly Forecast
+        <div className="flex justify-center mb-4">
+          <Typography variant="title5" className="font-bold">
+            Hourly Forecast:
           </Typography>
         </div>
 
-        {/* Hour Cards */}
-        <div className="flex justify-evenly  pb-4 gap-1 sm:gap-2 md:gap-3 px-2 sm:px-4 items-center overflow-x-hidden">
-          {data.map((hour, index) => (
-            <HourCard key={index} {...hour} />
-          ))}
+        {/* Hour Cards - with scrolling that hides scrollbar */}
+        <div className="relative h-full">
+          <div
+            className="absolute inset-0 overflow-x-auto scrollbar-hide cursor-grab hover:cursor-grab touch-pan-x snap-x snap-mandatory scroll-smooth"
+            style={{
+              scrollbarWidth: "none" /* Firefox */,
+              msOverflowStyle: "none" /* IE and Edge */,
+            }}
+            ref={scrollContainerRef}
+            onMouseDown={handleMouseDown}
+          >
+            {/* Custom CSS to hide scrollbar in WebKit browsers */}
+            <style
+              dangerouslySetInnerHTML={{
+                __html: `
+                .scrollbar-hide::-webkit-scrollbar {
+                  display: none;
+                }
+              `,
+              }}
+            />
+
+            <div className="flex gap-1 sm:gap-2 md:gap-3 px-2 sm:px-4 items-center h-full ">
+              {data.map((hour, index) => (
+                <div key={index} className="snap-start">
+                  <HourCard {...hour} />
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </div>

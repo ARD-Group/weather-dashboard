@@ -47,6 +47,7 @@ module.exports = {
         },
         background: "var(--background)",
         "card-bg": "var(--card-bg)",
+        "skeleton-bg": "var(--skeleton-bg)",
         text: "var(--text)",
         "text-secondary": "var(--text-secondary)",
         "search-bg": "var(--search-bg)",

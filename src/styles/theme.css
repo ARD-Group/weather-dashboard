@@ -7,6 +7,7 @@
     /* Colors - Light Theme */
     --background: #FFFFFF;
     --card-bg: #D9D9D9;
+    --skeleton-bg: #373636;
     --text: #292929;
     --text-secondary: rgba(41, 41, 41, 0.8);
     --search-bg: #D9D9D9;
@@ -22,6 +23,7 @@
     /* Colors - Dark Theme */
     --dark-bg: linear-gradient(110.05deg, #383838 0%, rgba(158, 158, 158, 0) 71.82%);
     --dark-card-bg: #444444;
+    --dark-skeleton-bg: #D9D9D9;
     --dark-text: #FFFFFF;
     --dark-text-secondary: rgba(255, 255, 255, 0.8);
     --dark-search-bg: #444444;
@@ -79,6 +81,7 @@
   .dark {
     --background: #383838;
     --card-bg: #444444;
+    --skeleton-bg: #373636;
     --text: #FFFFFF;
     --text-secondary: rgba(255, 255, 255, 0.8);
     --search-bg: #444444;
@@ -100,6 +103,24 @@
   .dark body {
     background: linear-gradient(110deg, #444444 0%, #000000 130.82%);
   }
+  .hourly-card-bg {
+    background: linear-gradient(168.19deg, #443D64 , #6582C600 );
+  }
+  .hourly-card-bg-is-day {
+    background: linear-gradient(168.19deg, #F88508 , #F6FAD900 );
+  }
+  .dark .hourly-card-bg {
+    background: #373636;
+  }
+  .dark .hourly-card-bg-is-day {
+    background: #373636;
+  }
+  .skeleton {
+    background: var(--skeleton-bg);
+  }
+  .dark .skeleton {
+    background: var(--dark-skeleton-bg);
+  }
 }
 
 @layer components {
@@ -107,6 +128,9 @@
     @apply bg-card-bg rounded-md shadow-card;
   }
 
+  .skeleton {
+    @apply bg-skeleton-bg rounded-md shadow-card;
+  }
   .search-bar {
     @apply bg-search-bg rounded-lg shadow-button text-search-text;
   }
