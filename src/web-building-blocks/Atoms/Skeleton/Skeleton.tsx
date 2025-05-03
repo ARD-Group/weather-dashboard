@@ -1,6 +1,6 @@
-import React, { useRef, useEffect, useState } from 'react';
-import { cn } from '../../shadcnUI/lib/utils';
-import ShowIf from '../../Atoms/ShowIf/ShowIf';
+import React, { useRef, useEffect, useState } from "react";
+import { cn } from "../../shadcnUI/lib/utils";
+import ShowIf from "../../Atoms/ShowIf/ShowIf";
 
 export interface SkeletonProps {
   className?: string;
@@ -12,9 +12,18 @@ export interface SkeletonProps {
   };
 }
 
-const Skeleton = ({ styleClasses, dataTestId, children, ...props }: React.HTMLAttributes<HTMLDivElement> & SkeletonProps) => {
+const Skeleton = ({
+  styleClasses,
+  dataTestId,
+  children,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement> & SkeletonProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [dimensions, setDimensions] = useState<{ width: number; height: number; borderRadius?: string } | null>(null);
+  const [dimensions, setDimensions] = useState<{
+    width: number;
+    height: number;
+    borderRadius?: string;
+  } | null>(null);
 
   useEffect(() => {
     if (containerRef.current && children) {
@@ -27,7 +36,7 @@ const Skeleton = ({ styleClasses, dataTestId, children, ...props }: React.HTMLAt
         setDimensions({
           width,
           height,
-          borderRadius: computedStyle.borderRadius || '0px',
+          borderRadius: computedStyle.borderRadius || "0px",
         });
       }
     }
@@ -36,12 +45,17 @@ const Skeleton = ({ styleClasses, dataTestId, children, ...props }: React.HTMLAt
   return (
     <div
       ref={containerRef}
-      className={cn('relative', styleClasses?.root)}
-      data-testid={`${dataTestId ? `${dataTestId}-` : ''}skeleton`}
+      className={cn("relative", styleClasses?.root)}
+      data-testid={`${dataTestId ? `${dataTestId}-` : ""} skeleton`}
       {...props}
     >
       <ShowIf If={!children}>
-        <div className={cn('bg-input h-full w-full animate-pulse rounded-md', styleClasses?.skeleton)} />
+        <div
+          className={cn(
+            "skeleton h-full w-full animate-pulse rounded-md",
+            styleClasses?.skeleton
+          )}
+        />
       </ShowIf>
       <ShowIf If={!!dimensions}>
         <div
@@ -50,10 +64,17 @@ const Skeleton = ({ styleClasses, dataTestId, children, ...props }: React.HTMLAt
             height: dimensions?.height,
             borderRadius: dimensions?.borderRadius,
           }}
-          className={cn('bg-input z-1 absolute left-0 top-0 animate-pulse', styleClasses?.skeleton)}
+          className={cn(
+            "skeleton z-1 absolute left-0 top-0 animate-pulse",
+            styleClasses?.skeleton
+          )}
         />
       </ShowIf>
-      {children && <div className="relative [&>*]:pointer-events-none [&>*]:select-none [&>*]:opacity-0">{children}</div>}
+      {children && (
+        <div className="relative [&>*]:pointer-events-none [&>*]:select-none [&>*]:opacity-0">
+          {children}
+        </div>
+      )}
     </div>
   );
 };

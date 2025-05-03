@@ -3,7 +3,8 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { verifyEmail, resendEmail } from "../../apis/api/adapter";
 import { Toast } from "../../web-building-blocks/Atoms/Toast/sonner/toast-sonner";
-
+import Spinner from "../../web-building-blocks/Atoms/Spinner/Spinner";
+import { AxiosError } from "axios";
 const OTPVerification: React.FC = () => {
   const [otp, setOtp] = useState("");
   const [timer, setTimer] = useState(60);
@@ -39,10 +40,10 @@ const OTPVerification: React.FC = () => {
       await verifyEmail({ email, otp });
       Toast.toastSuccess("Email verified successfully!");
       navigate("/dashboard");
-    } catch (error: any) {
+    } catch (error: unknown) {
       Toast.toastError(
-        error?.response?.data?.message ||
-          "Failed to verify email. Please try again."
+        ((error as AxiosError)?.response?.data as { message: string })
+          ?.message || "Failed to verify email. Please try again."
       );
     } finally {
       setIsLoading(false);
@@ -61,10 +62,10 @@ const OTPVerification: React.FC = () => {
       Toast.toastSuccess("OTP resent successfully!");
       setTimer(60);
       setCanResend(false);
-    } catch (error: any) {
+    } catch (error: unknown) {
       Toast.toastError(
-        error?.response?.data?.message ||
-          "Failed to resend OTP. Please try again."
+        ((error as AxiosError)?.response?.data as { message: string })
+          ?.message || "Failed to resend OTP. Please try again."
       );
     } finally {
       setIsLoading(false);
@@ -72,12 +73,12 @@ const OTPVerification: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-2xl shadow-lg transform transition-all duration-300 hover:shadow-xl">
+    <div className="min-h-screen flex items-center justify-center bg-primary-light py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-8 bg-base-white p-8 rounded-2xl shadow-lg transform transition-all duration-300 hover:shadow-xl">
         <div className="text-center">
-          <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-blue-100 mb-4">
+          <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-accent-blue mb-4">
             <svg
-              className="h-6 w-6 text-blue-600"
+              className="h-6 w-6 text-white"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -90,91 +91,60 @@ const OTPVerification: React.FC = () => {
               />
             </svg>
           </div>
-          <Typography className="text-3xl font-bold text-gray-900 mb-2">
-            Verify your email
+          <Typography className="text-3xl font-bold text-primary-dark mb-2">
+            Verify Your Email
           </Typography>
-          <Typography className="text-sm text-gray-600">
-            We've sent a verification code to{" "}
-            <span className="font-medium text-gray-900">{email}</span>
+          <Typography
+            variant="subtitle2"
+            className="text-center text-primary-dark"
+          >
+            Please enter the 6-digit code sent to{" "}
+            <span className="font-medium text-accent-blue">{email}</span>
           </Typography>
         </div>
 
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <div className="rounded-md shadow-sm">
-            <Input
-              inputId="otp-id"
-              label="Enter OTP"
-              onChangeHandler={(e) => setOtp(e)}
-              type="text"
-              maxLength={6}
-              className="text-center text-2xl tracking-widest rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500"
-              placeholder="••••••"
-            />
-          </div>
+          <Input
+            inputId="otp-id"
+            label="OTP"
+            type="text"
+            maxLength={6}
+            onChangeHandler={(e) => setOtp(e)}
+            placeholder="123456"
+          />
 
           <Button
+            type="submit"
             buttonStyle={`w-full py-3 px-4 rounded-lg text-white font-medium transition-all duration-300 ${
               isLoading
-                ? "bg-blue-400 cursor-not-allowed"
-                : "bg-blue-600 hover:bg-blue-700 transform hover:scale-[1.02]"
+                ? "bg-accent-blue/70 cursor-not-allowed"
+                : "bg-accent-blue hover:bg-accent-blue-dark transform hover:scale-[1.02]"
             }`}
-            dataTestId="verify-button"
-            onClick={handleSubmit}
-            disabled={isLoading || otp.length !== 6}
+            disabled={isLoading}
           >
-            {isLoading ? (
-              <div className="flex items-center justify-center">
-                <svg
-                  className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  ></circle>
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                  ></path>
-                </svg>
-                Verifying...
-              </div>
-            ) : (
-              "Verify"
-            )}
+            {isLoading ? <Spinner size="medium" /> : "Verify"}
           </Button>
-
-          <div className="text-center">
-            <Typography className="text-sm text-gray-600">
-              {canResend ? (
-                <button
-                  onClick={handleResendOTP}
-                  disabled={isLoading}
-                  className={`font-medium ${
-                    isLoading
-                      ? "text-gray-400 cursor-not-allowed"
-                      : "text-blue-600 hover:text-blue-500 transition-colors duration-300"
-                  }`}
-                >
-                  Resend OTP
-                </button>
-              ) : (
-                <span className="text-gray-500">
-                  Resend OTP in{" "}
-                  <span className="font-medium text-gray-900">{timer}</span>{" "}
-                  seconds
-                </span>
-              )}
-            </Typography>
-          </div>
         </form>
+
+        <Typography
+          variant="subtitle2"
+          className="text-center text-primary-dark"
+        >
+          {canResend ? (
+            <button
+              className="text-accent-blue hover:underline font-medium"
+              onClick={handleResendOTP}
+              disabled={isLoading}
+            >
+              Resend OTP
+            </button>
+          ) : (
+            <span className="text-sm">
+              You can resend in{" "}
+              <span className="font-semibold text-primary-dark">{timer}s</span>
+            </span>
+          )}
+        </Typography>
       </div>
     </div>
   );

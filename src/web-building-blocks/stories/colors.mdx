@@ -1,0 +1,89 @@
+import { Meta } from '@storybook/blocks';
+import { ColorPalette, ColorItem, ColorGroup } from '@storybook/blocks';
+
+import resolveConfig from 'tailwindcss/resolveConfig';
+import tailwindConfig from '../../../tailwind.config.js';
+
+export const fullConfig = resolveConfig(tailwindConfig);
+export const colors = fullConfig.theme.colors;
+
+export const brandColors =  Object.entries(colors).filter((token) => {
+  return typeof token[1] === 'string' && token[0].includes('brand');
+});
+
+export const brandSubColors = Object.entries(brandColors).map((color) => {
+  return color[1][1];
+});
+
+
+export const neutralColors =  Object.entries(colors).filter((token) => {
+  return  typeof token[1] === 'string' && token[0].includes('neutral');
+});
+
+export const neutralSubColors = Object.entries(neutralColors).map((color) => {
+  return color[1][1];
+});
+
+
+export const warningColors =  Object.entries(colors).filter((token) => {
+  return  typeof token[1] === 'string' && token[0].includes('warning');
+});
+
+export const warningSubColors = Object.entries(warningColors).map((color) => {
+  return color[1][1];
+});
+
+export const infoColors =  Object.entries(colors).filter((token) => {
+  return  typeof token[1] === 'string' && token[0].includes('info');
+});
+
+export const infoSubColors = Object.entries(infoColors).map((color) => {
+  return color[1][1];
+});
+
+export const positiveColors =  Object.entries(colors).filter((token) => {
+  return  typeof token[1] === 'string' && token[0].includes('positive');
+});
+
+export const positiveSubColors = Object.entries(positiveColors).map((color) => {
+  return color[1][1];
+});
+
+
+export const negativeColors =  Object.entries(colors).filter((token) => {
+  return  typeof token[1] === 'string' && token[0].includes('negative');
+});
+
+export const negativeSubColors = Object.entries(negativeColors).map((color) => {
+  return color[1][1];
+});
+
+<Meta title="System/Colors" />
+<ColorPalette >
+
+  {
+    <ColorItem
+      title="primary"
+      colors={colors.primary}
+    />
+  }
+
+  {
+    <ColorItem
+      title="secondary"
+      colors={colors.secondary}
+    />
+  }
+
+  
+  {
+    <ColorItem
+      title="accent"
+      colors={colors.accent}
+    />
+  }
+
+
+
+</ColorPalette>
+

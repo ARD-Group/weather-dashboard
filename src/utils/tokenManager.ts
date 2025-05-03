@@ -7,6 +7,9 @@ const TOKEN_KEY = "access_token";
 const REFRESH_TOKEN_KEY = "refresh_token";
 const TOKEN_EXPIRY_KEY = "token_expiry";
 
+/**
+ * Save authentication tokens to cookies
+ */
 export const saveTokens = (
   accessToken: string,
   refreshToken: string,
@@ -14,13 +17,6 @@ export const saveTokens = (
 ) => {
   const expiryDate = new Date();
   expiryDate.setSeconds(expiryDate.getSeconds() + expiresIn);
-
-  console.log("Saving tokens:", {
-    accessToken,
-    refreshToken,
-    expiresIn,
-    expiryDate,
-  });
 
   const cookieOptions = {
     expires: expiryDate,
@@ -37,24 +33,30 @@ export const saveTokens = (
   Cookies.set(TOKEN_EXPIRY_KEY, expiryDate.toISOString(), cookieOptions);
 };
 
+/**
+ * Retrieve access token from cookies
+ */
 export const getAccessToken = () => {
-  const token = Cookies.get(TOKEN_KEY);
-  console.log("Getting access token:", token);
-  return token;
+  return Cookies.get(TOKEN_KEY);
 };
 
+/**
+ * Retrieve refresh token from cookies
+ */
 export const getRefreshToken = () => {
-  const token = Cookies.get(REFRESH_TOKEN_KEY);
-  console.log("Getting refresh token:", token);
-  return token;
+  return Cookies.get(REFRESH_TOKEN_KEY);
 };
 
+/**
+ * Retrieve token expiry from cookies
+ */
 export const getTokenExpiry = () => {
-  const expiry = Cookies.get(TOKEN_EXPIRY_KEY);
-  console.log("Getting token expiry:", expiry);
-  return expiry;
+  return Cookies.get(TOKEN_EXPIRY_KEY);
 };
 
+/**
+ * Clear all authentication tokens
+ */
 export const clearTokens = () => {
   const cookieOptions = {
     path: "/",
@@ -67,24 +69,26 @@ export const clearTokens = () => {
   Cookies.remove(TOKEN_EXPIRY_KEY, cookieOptions);
 };
 
+/**
+ * Check if the access token is expired
+ */
 export const isTokenExpired = () => {
   const expiry = getTokenExpiry();
   if (!expiry) return true;
   return new Date(expiry) < new Date();
 };
 
+/**
+ * Initialize authentication state
+ * This function does NOT use React hooks and can be called from anywhere
+ */
 export const initializeAuth = async (
   setAuth: (update: SetStateAction<AuthState>) => void
 ) => {
-  console.log("Initializing auth...");
   const accessToken = getAccessToken();
   const refreshTokenValue = getRefreshToken();
-  const tokenExpiry = getTokenExpiry();
-
-  console.log("Auth state:", { accessToken, refreshTokenValue, tokenExpiry });
 
   if (!accessToken || !refreshTokenValue) {
-    console.log("No tokens found, clearing auth");
     clearTokens();
     setAuth({
       isAuthenticated: false,
@@ -95,14 +99,26 @@ export const initializeAuth = async (
   }
 
   if (isTokenExpired()) {
-    console.log("Token expired, attempting refresh");
     try {
-      const { data } = await refreshToken({ refreshToken: refreshTokenValue });
+      // Use the adapter directly instead of a hook
+      const response = await refreshToken({ refreshToken: refreshTokenValue });
+      
+      if (!response || !response.data) {
+        clearTokens();
+        setAuth({
+          isAuthenticated: false,
+          user: null,
+          isLoading: false,
+        });
+        return false;
+      }
+      
       const {
         accessToken: newAccessToken,
         refreshToken: newRefreshToken,
         expiresIn,
-      } = data;
+      } = response.data;
+      
       saveTokens(newAccessToken, newRefreshToken, expiresIn);
 
       setAuth({
@@ -110,10 +126,8 @@ export const initializeAuth = async (
         user: null,
         isLoading: false,
       });
-      console.log("Token refresh successful");
       return true;
     } catch (error) {
-      console.error("Token refresh failed:", error);
       clearTokens();
       setAuth({
         isAuthenticated: false,
@@ -124,7 +138,6 @@ export const initializeAuth = async (
     }
   }
 
-  console.log("Token valid, setting authenticated state");
   setAuth({
     isAuthenticated: true,
     user: null,

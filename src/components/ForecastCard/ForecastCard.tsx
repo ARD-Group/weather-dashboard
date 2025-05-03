@@ -1,13 +1,7 @@
-import React from "react";
-import {
-  WiDaySunnyOvercast,
-  WiDayCloudy,
-  WiDaySunny,
-  WiCloudy,
-  WiRain,
-} from "react-icons/wi";
+import React, { useState } from "react";
 import Typography from "../../web-building-blocks/Atoms/Typography";
 import { getDate } from "../../web-building-blocks/utils/time";
+import { Skeleton } from "../../web-building-blocks/Atoms";
 
 interface ForecastDay {
   date: string;
@@ -16,77 +10,73 @@ interface ForecastDay {
   avg_temp_c: number;
   condition: string;
   icon: string;
+  hourly_forecast?: any[];
 }
 
 interface ForecastCardProps {
   data: ForecastDay[];
   loading: boolean;
+  onDaySelect?: (day: ForecastDay) => void;
 }
 
-const WeatherIcon: React.FC<{
-  type: ForecastDay["condition"];
-  className?: string;
-}> = ({ type, className }) => {
-  const iconProps = { className: `w-[60px] h-[60px] ${className}` };
+const ForecastCard: React.FC<ForecastCardProps> = ({
+  data,
+  loading,
+  onDaySelect,
+}) => {
+  const [selectedDay, setSelectedDay] = useState<number | null>(0);
 
-  switch (type) {
-    case "partly-cloudy":
-      return <WiDaySunnyOvercast {...iconProps} />;
-    case "mostly-cloudy":
-      return <WiDayCloudy {...iconProps} />;
-    case "sunny":
-      return <WiDaySunny {...iconProps} />;
-    case "cloudy":
-      return <WiCloudy {...iconProps} />;
-    case "rainy":
-      return <WiRain {...iconProps} />;
-    default:
-      return null;
-  }
-};
-
-const ForecastCard: React.FC<ForecastCardProps> = ({ data, loading }) => {
   if (loading) {
     return (
-      <div className="w-full h-full text-center bg-card-bg  rounded-panel shadow-panel p-4 ">
-        <Typography variant="title3" className="  text-center">
-          5 Days Forecast
-        </Typography>
-      </div>
+      <Skeleton
+        styleClasses={{
+          skeleton: "w-auto h-[366px] p-12 rounded-panel shadow-panel",
+        }}
+      />
     );
   }
 
+  const handleDayClick = (day: ForecastDay, index: number) => {
+    setSelectedDay(index);
+    if (onDaySelect) {
+      onDaySelect(day);
+    }
+  };
+
   return (
-    <div className="w-full h-full text-center bg-card-bg  rounded-panel shadow-panel p-4 ">
+    <div className="w-auto h-[366px] text-center bg-card-bg rounded-panel shadow-panel p-4">
       {/* Title */}
-      <Typography variant="title3" className="  text-center">
-        5 Days Forecast
+      <Typography variant="title5" className="text-center">
+        5 Days Forecast:
       </Typography>
 
       {/* Forecast Days */}
-      <div className="space-y-4">
+      <div className="pl-3">
         {data.map((day, index) => {
           const { avg_temp_c, condition, icon, date } = day;
           return (
-            <div key={index} className="flex items-center h-[60px] mx-[30px]">
+            <div
+              key={index}
+              className={`flex items-center h-[60px] cursor-pointer transition-transform duration-200 hover:scale-[1.03] ${
+                selectedDay === index
+                  ? "bg-hourly-card-bg rounded-xl"
+                  : ""
+              }`}
+              onClick={() => handleDayClick(day, index)}
+            >
               {/* Weather Icon */}
-                <img src={icon} alt={condition} className="w-[60px] h-[60px]" />
+              <img src={icon} alt={condition} className="w-[60px] h-[60px]" />
 
               {/* Temperature */}
-              <div className="w-full ">
-                <Typography
-                  variant="title3"
-                  className=" font-semibold text-center"
-                >
+              <div className="w-full">
+                <Typography variant="subtitle2-strong">
                   {Math.round(avg_temp_c)}°C
                 </Typography>
               </div>
 
               {/* Date */}
-              <div className="w-full ">
-                <Typography variant="title4" className=" font-semibold">
-                  {getDate(date)}
-                </Typography>
+              <div className="w-full">
+                <Typography variant="subtitle2">{getDate(date)}</Typography>
               </div>
             </div>
           );

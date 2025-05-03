@@ -42,7 +42,6 @@ export interface WeatherCurrentResponse {
     pressure_mb: number;
     uv: number;
     icon: string;
-    is_day: number;
     astronomy: {
       sunrise: string;
       sunset: string;
@@ -67,7 +66,7 @@ export interface HourlyForecastResponse {
   condition: string;
   wind_kph: number;
   icon: string;
-  is_day: number;
   wind_dir: "N" | "NNE" | "NE" | "ENE" | "E" | "ESE" | "SE" | "SSE" | "S" | "SSW" | "SW" | "WSW" | "W" | "WNW" | "NW" | "NNW";
+  is_day: number;
 }
 

@@ -1,8 +1,9 @@
 import { config } from "../env-config";
 import axios, { AxiosError } from "axios";
+import { getAccessToken } from "../utils/tokenManager";
 
 export const getToken = (): string => {
-  const accessToken = localStorage.getItem("core-access-token") ?? undefined;
+  const accessToken = getAccessToken();
 
   return accessToken ? `Bearer ${accessToken}` : "";
 };

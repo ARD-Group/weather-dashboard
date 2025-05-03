@@ -443,11 +443,14 @@ const MultipleSelector = forwardRef(
                   </div>
                 )}
                 <div className="flex items-center gap-2 flex-1">
-                  {mainIcon && <div className="flex-shrink-0">{mainIcon}</div>}
+                  {/* Only show mainIcon if nothing is selected */}
+                  {((mode === "single" && !selected?.[0]) || (mode === "multiple" && selected.length === 0)) && mainIcon && (
+                    <div className="flex-shrink-0">{mainIcon}</div>
+                  )}
                   <CommandPrimitive.Input
                     ref={inputRef}
-                    value={""}
-                    readOnly
+                    value={inputValue}
+                    onValueChange={(value: string) => setInputValue(value)}
                     disabled={disabled || readOnly}
                     onFocus={(event) => {
                       setOpen(true);
@@ -505,7 +508,7 @@ const MultipleSelector = forwardRef(
               >
                 <CommandList className="bg-popover text-popover-foreground animate-in start-0 top-1 z-10 w-full rounded-md text-search-text border shadow-md outline-none bg-search-bg ">
                   <div className="sticky top-0 z-10 bg-search-bg text-search-text">
-                    {(hasSearch || creatable) && (
+                    {(!hasSearch || creatable) && (
                       <div className="flex items-center gap-2 border-b p-2 text-search-text">
                         <div>
                           {icon || (

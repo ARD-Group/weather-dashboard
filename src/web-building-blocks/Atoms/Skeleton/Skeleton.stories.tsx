@@ -34,7 +34,7 @@ export const Demo: Story = {
 export const WithChild: Story = {
   render: () => (
     <Skeleton>
-      <div className="h-36 w-80 bg-red-400">Child with custom style</div>
+      <div className="h-36 w-80 bg-red-400 text-slate-500">Child with custom style</div>
     </Skeleton>
   ),
 };
